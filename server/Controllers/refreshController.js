@@ -11,13 +11,16 @@ const {
 module.exports.refreshTokenVerification = async (req, res, next) => {
   const cookies = req.cookies;
 
-  if (!cookies.SESSION_ID) return res.status(403);
+  if (!cookies.SESSION_ID) return res.sendStatus(403);
 
   try {
     const foundUser = await User.findOne({ refreshToken: cookies.SESSION_ID });
     if (!foundUser) return res.status(404).json({ msg: "User not found" });
 
-    const acceptable = verifyToken(cookies.SESSION_ID, process.env.REFRESH_SECRET_KEY);
+    const acceptable = verifyToken(
+      cookies.SESSION_ID,
+      process.env.REFRESH_SECRET_KEY
+    );
     if (!acceptable) return res.status(403).json({ msg: "Invalid token" });
 
     // console.log(foundUser._id, process.env.REFRESH_SECRET_KEY);

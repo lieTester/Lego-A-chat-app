@@ -56,7 +56,9 @@ module.exports.register = async (req, res, next) => {
     const { username, email, password } = req.body;
     const emailCheck = await User.findOne({ email });
     if (emailCheck) {
-      return res.json({ msg: "User already present", status: false });
+      return res
+        .status(302)
+        .json({ msg: "Email already exists", status: false });
     }
 
     // send mail with defined transport object
@@ -77,7 +79,11 @@ module.exports.register = async (req, res, next) => {
     return res.status(200).send({
       msg: "Success!",
       status: true,
-      id: generateToken(token._id, process.env.ACCESS_SECRET_KEY, "5m"),
+      token: generateToken(
+        [token._id, user._id],
+        process.env.ACCESS_SECRET_KEY,
+        "5m"
+      ),
     });
   } catch (error) {
     return res.status(400).send({ msg: "Registeration not sucessfull", error });
@@ -106,7 +112,11 @@ module.exports.forgotPassword = async (req, res, next) => {
     res.status(200).send({
       msg: "Mail send check",
       status: true,
-      id: generateToken(token._id, process.env.ACCESS_SECRET_KEY, "5m"),
+      id: generateToken(
+        [token._id, user._id],
+        process.env.ACCESS_SECRET_KEY,
+        "5m"
+      ),
     });
   } catch (error) {
     return res.status(400).send({ error });
@@ -161,9 +171,7 @@ module.exports.login = async (req, res, next) => {
   }
 };
 
-
-
 // accessToken time check routr
 module.exports.accessTokenTest = async (req, res, next) => {
-  return res.status(200).json({msg:"accessToken: working"})
-}
+  return res.status(200).json({ msg: "accessToken: working" });
+};
