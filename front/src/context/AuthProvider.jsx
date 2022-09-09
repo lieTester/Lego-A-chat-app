@@ -3,7 +3,7 @@ import {useState,createContext} from 'react'
 const AuthContext = createContext();
 export const AuthProvider=({children})=> {
   const [auth, setauth] = useState({
-    remember: JSON.parse(localStorage.getItem("remember")) || true,
+    remember: JSON.parse(localStorage.getItem("remember")) || false,
   });
 
   return (
