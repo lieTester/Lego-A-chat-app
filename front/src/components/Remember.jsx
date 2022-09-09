@@ -37,17 +37,19 @@ function Remember() {
   }, [isLoading, auth]);
   return (
     <>
-      {auth?.email ? (
+      {auth?.remember ? (
         // user is authenticated
-        !auth?.remember ? (
+        isLoading ? (
+          // if users refresh token is in loader phase
+          <div className="bg-prim1 h-screen flex justify-center items-center text-prim2">
+            Loading...
+          </div>
+        ) : auth?.accessToken ? (
           // if we want to remember the user
           <Outlet />
-        ) : isLoading ? (
-          // if users refresh token is in loader phase
-          <div className="bg-prim1 h-screen flex justify-center items-center text-prim2">Loading...</div>
         ) : (
           // everthing working correctly
-          <Outlet />
+          <Navigate to="/login-register" state={{ from: location }} replace />
         )
       ) : (
         // if still we don't have login user will navigate to the loginregistration page

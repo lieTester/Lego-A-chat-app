@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"
-import Login from "./subcomponent/Login";
-import Register from "./subcomponent/Register";
-import ForgotPassword from "./subcomponent/ForgotPassword";
+
+import Login from "./subcomponent/auth/Login";
+import Register from "./subcomponent/auth/Register";
+import ForgotPassword from "./subcomponent/auth/ForgotPassword";
 import authentication from "../assets/images/authenticate2.svg";
+import Toaster from "./subcomponent/Toaster";
 
 function Authentication() {
   // set which form should be show
@@ -64,7 +64,7 @@ function Authentication() {
           {changeForm()}
         </div>
       </center>
-      <ToastContainer />
+      <Toaster />
     </div>
   );
 }
