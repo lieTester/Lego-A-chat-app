@@ -1,25 +1,19 @@
 import { useContext } from "react";
 import { useFormik } from "formik";
-import { toast } from "react-toastify";
+
 import { useNavigate, useLocation } from "react-router-dom";
 import { AiOutlineCloseCircle, AiFillLock } from "react-icons/ai";
 import { MdMarkEmailRead } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
-import axios from "../../api/apiAxios";
-import AuthContext from "../../context/AuthProvider";
-import logo from "../../assets/images/logo2.png";
+import { toast } from "react-toastify";
+import axios from "../../../api/apiAxios";
+import AuthContext from "../../../context/AuthProvider";
+import logo from "../../../assets/images/logo2.png";
 
 function Register() {
   const { setauth } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
-
-  const tostOptions={
-    position:"bottom-right",
-    autoClose:8000,
-    pauseOnHover:true,
-    theme:"dark"
-  }
 
   const registerForm = useFormik({
     initialValues: {
@@ -44,15 +38,18 @@ function Register() {
         );
         if (response.status === 200) {
           setauth((prev) => {
-            console.log(response.data, prev);
-            return { ...prev, accessToken: response.token };
+            // console.log(response.data, prev);
+            return { ...prev, accessToken: response.data.token };
           });
+          toast.success(response.data.msg);
           values = {};
-          navigate("/verify-OTP", { from: location });
-        } 
+          setTimeout(() => {
+            navigate("/verify-OTP", { from: location });
+          }, 3000);
+        }
       } catch (error) {
-        console.error(error);
-        toast.error(error.response.data.msg,tostOptions);
+        // console.error(error);
+        toast.error(error.response.data.msg);
       }
       // tmppass =sefe12@Q
     },

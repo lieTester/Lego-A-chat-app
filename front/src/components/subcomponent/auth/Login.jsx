@@ -1,30 +1,73 @@
 import { AiOutlineCloseCircle, AiFillLock } from "react-icons/ai";
 import { MdMarkEmailRead } from "react-icons/md";
 
-import AuthContext from "../../context/AuthProvider";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useFormik } from "formik";
-import logo from "../../assets/images/logo2.png";
-import { useNavigate,useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
+import logo from "../../../assets/images/logo2.png";
+import AuthContext from "../../../context/AuthProvider";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "../../../api/apiAxios";
 
 function Login({ setForm }) {
-  const { setauth } = useContext(AuthContext);
-
+  const { auth, setauth } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+
+  // useEffect(() => {
+  //   if (auth?.accessToken) {
+  //     navigate(from, { replace: true });
+  //   }
+  // }, [auth]);
+
   const loginForm = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-    onSubmit: (values) => {
-      setauth((prev) => {
-        console.log(values,prev);
-        return { ...prev, email:'sdfjsdnf' };
-      });
-      navigate(from, { replace: true });
-    }
+    onSubmit: async (values) => {
+      try {
+        const response = await axios.post(
+          "/api/auth/login",
+          JSON.stringify({
+            email: values.email,
+            password: values.password,
+          }),
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
+        );
+        // console.log(response);
+        if (response.status === 200) {
+          setauth((prev) => {
+            return {
+              ...prev,
+              accessToken: response.data.token,
+              username: response.data.username,
+            };
+          });
+          toast.success(response.data.msg);
+          localStorage.setItem("remember", true);
+          setTimeout(() => {
+            navigate(from, { replace: true });
+          }, 3000);
+        }
+      } catch (error) {
+        // console.log(error);
+        toast.error(error.response.data.msg);
+      }
+    },
+    validate: (values) => {
+      let errors = {};
+      if (!values.email) {
+        errors.email = "Email is required";
+      } else if (!values.password) {
+        errors.password = "Password is required";
+      }
+      return errors;
+    },
   });
 
   return (
@@ -118,7 +161,7 @@ function Login({ setForm }) {
             }}
             className="cursor-pointer"
           >
-            forgotPassword?
+            forgotPassword? sefe12@Q
           </label>
         </ul>
       </div>
