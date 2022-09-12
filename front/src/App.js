@@ -6,7 +6,7 @@ import OtpVerification from "./components/OtpVerification";
 
 function App() {
   return (
-    <div className="bg-prim1 ">
+    <div className="bg-prim1">
       <Routes>
         <Route path="login-register" element={<Authentication />} />
         <Route path="verify-OTP" element={<OtpVerification />} />

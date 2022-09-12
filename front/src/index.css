@@ -6,8 +6,11 @@
 @tailwind utilities;
 
 @layer base {
+  *{
+    list-style-type: none;
+  }
   :root {
-    --bg-prim1: #0E1625;
+    --bg-prim1: #0e1625;
     --bg-prim2: #16233b;
     --bg-seco1: white;
     --bg-seco2: #2c51a9;
@@ -16,8 +19,8 @@
     --text-prim3: #16233b;
     --sh-prim1: #06090f;
     --sh-prim2: #16233b;
-    --error:crimson;
-    --success:#2E3828;
+    --error: crimson;
+    --success: #2e3828;
   }
   .theme-base {
   }
@@ -36,7 +39,7 @@
   }
   /* width */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 4px;
     /* height: 14px; */
   }
 
@@ -48,11 +51,11 @@
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #cbd5e0;
+    background: #424C60;
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #a0aec0;
+    background: #a0aec0e8;
   }
 }
