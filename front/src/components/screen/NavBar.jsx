@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { IoIosClose } from "react-icons/io";
 import { AiOutlineUsergroupAdd, AiOutlineInfoCircle } from "react-icons/ai";
 import { FiSettings } from "react-icons/fi";
@@ -18,26 +19,36 @@ function NavBar() {
           >
             <BiMenu size={30} />
           </li>
-          <li className="font-[500] text-[22px] pl-4 ">Lego</li>
+          <li className="font-[500] text-[22px] pl-4 ">
+            <Link to="/">Lego</Link>
+          </li>
         </ul>
         <div className="flex">
-          <ul className="flex mr-4 text-[11px] text-prim2 [&>li]:font-[500] [&>li>*]:mx-auto [&>li]:cursor-pointer [&>li]:mx-2 [&>li]:md:mx-3 [&>li]:lg:mx-5 [&>li]:mt-[2px] ">
-            <li className="hover:text-prim1">
-              <BiSearch className="text-[24px] sm:text-[18px]" />
-              <span className="hidden sm:block">Search</span>
-            </li>
-            <li className="hover:text-prim1 hidden sm:block">
-              <BiUser size={18} />
-              <span>Contacts</span>
-            </li>
-            <li className="hover:text-prim1 hidden sm:block">
-              <AiOutlineUsergroupAdd size={18} />
-              <span>New Group</span>
-            </li>
-            <li className="hover:text-prim1 hidden sm:block">
-              <FiSettings size={18} />
-              <span>Settings</span>
-            </li>
+          <ul className="flex mr-4 text-[11px] text-prim2 [&>a>li]:font-[500] [&>a>li>*]:mx-auto [&>a>li]:cursor-pointer [&>a>li]:mx-2 [&>a>li]:md:mx-3 [&>a>li]:lg:mx-5 [&>a>li]:mt-[2px] ">
+            <Link to="/search">
+              <li className="hover:text-prim1">
+                <BiSearch className="text-[24px] sm:text-[18px]" />
+                <span className="hidden sm:block">Search</span>
+              </li>
+            </Link>
+            <Link to="/contacts">
+              <li className="hover:text-prim1 hidden sm:block">
+                <BiUser size={18} />
+                <span>Contacts</span>
+              </li>
+            </Link>
+            <Link to="/new-group">
+              <li className="hover:text-prim1 hidden sm:block">
+                <AiOutlineUsergroupAdd size={18} />
+                <span>New Group</span>
+              </li>
+            </Link>
+            <Link to="/settings">
+              <li className="hover:text-prim1 hidden sm:block">
+                <FiSettings size={18} />
+                <span>Settings</span>
+              </li>
+            </Link>
           </ul>
           <div className="hidden sm:block relative mr-4 z-[20] cursor-pointer [&:hover>ul]:!block">
             <ul>
@@ -76,26 +87,36 @@ function NavBar() {
               <IoIosClose size={40} />
             </span>
             <ul className="relative w-fit p-2 top-[30px] bg-prim2 rounded-full">
-              <img src={user} alt="" className="w-[40px] h-[40px] rounded-full" />
+              <img
+                src={user}
+                alt=""
+                className="w-[40px] h-[40px] rounded-full"
+              />
             </ul>
             <span className="absolute bottom-[20px]">Puneet Khandal</span>
           </div>
-          <ul className="relative text-prim1 mx-auto [&>*]:cursor-pointer [&>*]:p-3  [&>*]:!w-full [&>*]:flex  ">
-            <li className="hover:bg-prim1">
-              <AiOutlineUsergroupAdd
-                size={20}
-                className="mr-3 text-prim2 mt-[2px]"
-              />
-              New Group
-            </li>
-            <li className="hover:bg-prim1">
-              <BiUser size={20} className="mr-3 text-prim2 mt-[2px]" />
-              Contacts
-            </li>
-            <li className="hover:bg-prim1">
-              <FiSettings size={20} className="mr-3 text-prim2 mt-[2px]" />
-              Settings
-            </li>
+          <ul className="relative text-prim1 mx-auto [&>a>*]:cursor-pointer [&>a>*]:p-3  [&>a>*]:!w-full [&>a>*]:flex  ">
+            <Link to="/new-group">
+              <li className="hover:bg-prim1">
+                <AiOutlineUsergroupAdd
+                  size={20}
+                  className="mr-3 text-prim2 mt-[2px]"
+                />
+                New Group
+              </li>
+            </Link>
+            <Link to="/contacts">
+              <li className="hover:bg-prim1">
+                <BiUser size={20} className="mr-3 text-prim2 mt-[2px]" />
+                Contacts
+              </li>
+            </Link>
+            <Link to="/settings">
+              <li className="hover:bg-prim1">
+                <FiSettings size={20} className="mr-3 text-prim2 mt-[2px]" />
+                Settings
+              </li>
+            </Link>
           </ul>
           <div className="w-full absolute bottom-0 ">
             <ul className="relative  bg-prim1 text-prim1 [&>*]:cursor-pointer [&>*]:px-3 [&>*]:py-2  [&>*]:!w-full [&>*]:flex  ">
