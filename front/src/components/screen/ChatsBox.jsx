@@ -28,7 +28,7 @@ function ChatsBox() {
   const arrangeData = () => {
     let overallChat = data.map((value, key) => {
       return (
-        <ul className="h-auto px-4 flex py-2 hover:bg-prim2">
+        <ul className="h-auto px-4 flex py-2 hover:bg-prim2 cursor-pointer" key={key}>
           <li className="relative flex justify-center items-center w-[45px] h-[45px] shadow-[1px_2px_2px_var(--sh-prim1),-1px_-2px_2px_var(--sh-prim2),inset_1px_1px_4px_var(--sh-prim1),inset_-1px_-1px_4px_var(--sh-prim2)]  rounded-full">
             <img
               src={user}
@@ -39,10 +39,10 @@ function ChatsBox() {
               {value.unseen}
             </label>
           </li>
-          <li className=" relative w-[calc(100%-40px)]  ml-4 [&>*]:block">
+          <li className=" relative w-[calc(100%-45px)] pl-4   [&>*]:block">
             <span className="absolute right-0 text-[12px]">{value.date}</span>
-            <label className="text-prim1">{value.name} </label>
-            <label className="text-[13px]">{value.message}</label>
+            <span className="text-prim1">{value.name} </span>
+            <span className="text-[13px]">{value.message}</span>
           </li>
         </ul>
       );
@@ -51,7 +51,7 @@ function ChatsBox() {
   };
 
   return (
-    <div className="relative w-full h-full bg-prim1  sm:w-[45%] md:w-[35%] lg:w-[30%] z-[2]">
+    <div className="relative w-full h-full bg-prim1 sm:border-r-[2px] border-prim2 sm:w-[45%] md:w-[40%] lg:w-[30%] z-[2]">
       <div className=" h-[55px]  px-4 py-1">
         <form action="" className="w-full py-1 ">
           <ul className="relative flex border-[2px] p-[1px] border-prim2 rounded-full   ">
@@ -90,7 +90,6 @@ function ChatsBox() {
           </li>
         </ul> */}
 
-        {arrangeData()}
         {arrangeData()}
         {arrangeData()}
         {arrangeData()}

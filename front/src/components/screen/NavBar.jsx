@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IoIosClose} from "react-icons/io";
+import { IoIosClose } from "react-icons/io";
 import { AiOutlineUsergroupAdd, AiOutlineInfoCircle } from "react-icons/ai";
 import { FiSettings } from "react-icons/fi";
 import { BiUser, BiMenu, BiSearch } from "react-icons/bi";
@@ -8,9 +8,60 @@ function NavBar() {
   const [sideBar, setSideBar] = useState(false);
   return (
     <>
+      <nav className="w-full h-[42px] z-20 bg-seco2 !py-[6px] flex justify-between text-prim1">
+        <ul className="flex">
+          <li
+            className="sm:hidden  cursor-pointer  ml-4"
+            onClick={() => {
+              setSideBar(!sideBar);
+            }}
+          >
+            <BiMenu size={30} />
+          </li>
+          <li className="font-[500] text-[22px] pl-4 ">Lego</li>
+        </ul>
+        <div className="flex">
+          <ul className="flex mr-4 text-[11px] text-prim2 [&>li]:font-[500] [&>li>*]:mx-auto [&>li]:cursor-pointer [&>li]:mx-2 [&>li]:md:mx-3 [&>li]:lg:mx-5 [&>li]:mt-[2px] ">
+            <li className="hover:text-prim1">
+              <BiSearch className="text-[24px] sm:text-[18px]" />
+              <span className="hidden sm:block">Search</span>
+            </li>
+            <li className="hover:text-prim1 hidden sm:block">
+              <BiUser size={18} />
+              <span>Contacts</span>
+            </li>
+            <li className="hover:text-prim1 hidden sm:block">
+              <AiOutlineUsergroupAdd size={18} />
+              <span>New Group</span>
+            </li>
+            <li className="hover:text-prim1 hidden sm:block">
+              <FiSettings size={18} />
+              <span>Settings</span>
+            </li>
+          </ul>
+          <div className="hidden sm:block relative mr-4 z-[20] cursor-pointer [&:hover>ul]:!block">
+            <ul>
+              <li className="relative flex justify-center items-center w-[35px] h-[35px] bg-prim1 rounded-full">
+                <img
+                  src={user}
+                  alt=""
+                  className="!w-[30px] !h-[30px] rounded-full p-1"
+                />
+              </li>
+            </ul>
+            <ul className="absolute hidden text-sm right-0 w-fit   rounded-sm [&>*]:px-10 [&>*]:py-[3px] [&>*]:bg-seco2  overflow-hidden">
+              <li className="w-0 h-[10px] !p-0 "></li>
+              <li className="hover:bg-seco1 hover:text-prim3 before:hover:bg-seco1 before:absolute before:!w-4 before:!h-4 before:bg-seco2 brfore:z-[30] before:right-2 before:rotate-45 before:top-1 before:rounded-sm">
+                Puneet
+              </li>
+              <li className="hover:text-prim3 hover:bg-seco1">logout</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
       <div
         className={
-          "w-full z-20 sm:hidden absolute transition-all !duration-100 bg-[#0d1122e8] overflow-hidden " +
+          "w-full z-20 sm:hidden absolute top-0 transition-all !duration-100 bg-[#0d1122e8] overflow-hidden " +
           (sideBar ? "right-0" : "right-full")
         }
       >
@@ -25,7 +76,7 @@ function NavBar() {
               <IoIosClose size={40} />
             </span>
             <ul className="relative w-fit p-2 top-[30px] bg-prim2 rounded-full">
-              <img src={user} alt="" className="w-[40px] h-[40px]" />
+              <img src={user} alt="" className="w-[40px] h-[40px] rounded-full" />
             </ul>
             <span className="absolute bottom-[20px]">Puneet Khandal</span>
           </div>
@@ -59,24 +110,6 @@ function NavBar() {
           </div>
         </div>
       </div>
-      <nav className="w-full h-[40px] z-20 bg-seco2 py-1 flex justify-between text-prim1">
-        <ul className="flex">
-          <li
-            className="sm:hidden  cursor-pointer  ml-4"
-            onClick={() => {
-              setSideBar(!sideBar);
-            }}
-          >
-            <BiMenu size={30} />
-          </li>
-          <li className="font-[500] text-[22px] ml-3 ">Lego</li>
-        </ul>
-        <ul>
-          <li className="cursor-pointer  mr-4 mt-1">
-            <BiSearch size={24} />
-          </li>
-        </ul>
-      </nav>
     </>
   );
 }

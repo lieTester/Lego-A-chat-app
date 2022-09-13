@@ -19,7 +19,7 @@ function ScreenMain() {
   return (
     <>
       <NavBar />
-      <div className="relative h-[calc(100%-42px)] flex z-10">
+      <div className="relative h-[calc(100%-44px)] flex z-10">
         {handelBlock(blockType)}
         <MessagesBox />
       </div>
