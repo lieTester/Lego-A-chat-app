@@ -6,8 +6,10 @@
 @tailwind utilities;
 
 @layer base {
-  *{
+  * {
     list-style-type: none;
+    margin: 0px;
+    padding: 0px;
   }
   :root {
     --bg-prim1: #0e1625;
@@ -20,7 +22,7 @@
     --sh-prim1: #06090f;
     --sh-prim2: #16233b;
     --error: crimson;
-    --success: #2e3828;
+    --success: #008a17;
   }
   .theme-base {
   }
@@ -51,7 +53,7 @@
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #424C60;
+    background: #424c60;
   }
 
   /* Handle on hover */
