@@ -6,6 +6,8 @@ import OtpVerification from "./components/OtpVerification";
 import SearchBox from "./components/screen/SearchBox";
 import ContactsBox from "./components/screen/ContactsBox";
 import ChatsBox from "./components/screen/ChatsBox";
+import NewGroup from "./components/screen/NewGroup";
+import SettingsBox from "./components/screen/SettingsBox";
 
 function App() {
   return (
@@ -19,7 +21,8 @@ function App() {
             <Route path="/" element={<ChatsBox />} />
             <Route path="search" element={<SearchBox />} />
             <Route path="contacts" element={<ContactsBox />} />
-            {/* <Route path="new-group" element={<NewGroup/>} /> */}
+            <Route path="new-group" element={<NewGroup/>} />
+            <Route path="settings" element={<SettingsBox />} />
           </Route>
         </Route>
       </Routes>
