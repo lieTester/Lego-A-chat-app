@@ -11,7 +11,16 @@ require("dotenv").config();
 
 const app = express();
 
-app.use(cors({ origin: "*", credentials: true }));
+app.use(
+  cors({
+    origin: [
+      "Access-Control-Allow-Origin",
+      "http://192.168.29.62:3000",
+      "http://localhost:3000",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // middleware cookiesparser

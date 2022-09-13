@@ -9,6 +9,7 @@ const messageSchema = new mongoose.Schema(
       belongsTo: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Chats",
+        required: true
       },
     },
     sender: {

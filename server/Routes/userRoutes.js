@@ -23,6 +23,6 @@ router.post("/login", login);
 router.post("/forgot", forgotPassword);
 router.get("/refresh-token", refreshTokenVerification);
 router.post("/verify-OTP", OTPVerification, verifyOTP);
-router.post("/test", accessTokenVerification,accessTokenTest);
+router.get("/test", accessTokenVerification,accessTokenTest);
 
 module.exports = router;

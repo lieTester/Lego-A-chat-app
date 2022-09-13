@@ -28,7 +28,7 @@ module.exports.verifyOTP = async (req, res, next) => {
       // its about if user loged in but never verified before so data is still with us
       // and because its unverified use not able to log in ultimately they use forgot password
       // in that case verification and password change both work at same time
-      if (newpassword !== undefined) {
+      if (newpassword !== undefined && newpassword !== "") {
         await User.updateOne(
           { _id: user.user },
           {
@@ -43,10 +43,10 @@ module.exports.verifyOTP = async (req, res, next) => {
       // console.log(token, del, _iduser);
       return res.status(200).json({ msg: "User verified success!" });
     }
-    return res.status(400).json({ msg: "something went wrong" });
+    return res.status(400).json({ msg: "Bad request!" });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ msg: "something went wrong" });
+    return res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 
@@ -54,7 +54,7 @@ module.exports.verifyOTP = async (req, res, next) => {
 module.exports.register = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
-    const emailCheck = await User.findOne({ email });
+    const emailCheck = await User.findOne({ email: email });
     if (emailCheck) {
       return res
         .status(302)
@@ -63,7 +63,7 @@ module.exports.register = async (req, res, next) => {
 
     // send mail with defined transport object
     const { transporter, OTP, option } = mailit(email);
-    // await transporter.sendMail(option);
+    await transporter.sendMail(option);
 
     const user = await User.create({
       email,
@@ -94,7 +94,7 @@ module.exports.register = async (req, res, next) => {
 module.exports.forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email });
     if (!user) {
       return res
         .status(404)
@@ -112,7 +112,7 @@ module.exports.forgotPassword = async (req, res, next) => {
     res.status(200).send({
       msg: "Mail send check",
       status: true,
-      id: generateToken(
+      token: generateToken(
         [token._id, user._id],
         process.env.ACCESS_SECRET_KEY,
         "5m"
@@ -127,6 +127,7 @@ module.exports.forgotPassword = async (req, res, next) => {
 module.exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+
     const foundUser = await User.findOne({ email: email });
     if (!foundUser) {
       return res.status(404).send({ msg: "User not found", status: false });
@@ -143,7 +144,8 @@ module.exports.login = async (req, res, next) => {
     const accessToken = generateToken(
       foundUser._id,
       process.env.ACCESS_SECRET_KEY,
-      "1m"
+      // chnge 1d > 1m after work completed on api
+      "1d"
     );
     const refreshToken = generateToken(
       { "jwt-token": "refreshToken" },
@@ -165,7 +167,11 @@ module.exports.login = async (req, res, next) => {
       // secure: true,// with secure we cannot work at localhost
       maxAge: getExpiry(22),
     });
-    return res.status(200).json({ token: accessToken });
+    return res.status(200).json({
+      msg: "Login successfull",
+      token: accessToken,
+      username: foundUser.username,
+    });
   } catch (error) {
     return res.status(500).json({ msg: "server error", error: error.stack });
   }
