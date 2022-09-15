@@ -1,6 +1,23 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
+// time string genaratior
+exports.getTime = (date) => {
+
+  let todaysDate = new Date();
+
+  if(date.getDate() === todaysDate.getDate()){
+    let hour = date.getHours() % 12 || 12;
+    let minute = date.getMinutes() % 60 || 0;
+    let isAm = date.getHours() < 12 ? "am" : "pm";
+    return `${hour}:${minute} ${isAm}`;
+  }
+  let curr = todaysDate.getDate();
+  todaysDate.setDate(curr - 1);
+  if (date.getDate() === todaysDate.getDate()) return "yesterday";
+  return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+};
+
 // get days method
 exports.getExpiry = (days) => {
   return days * 24 * 60 * 60 * 1000;
