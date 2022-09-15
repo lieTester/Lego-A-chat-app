@@ -176,6 +176,28 @@ module.exports.login = async (req, res, next) => {
     return res.status(500).json({ msg: "server error", error: error.stack });
   }
 };
+// logout user
+module.exports.logout = async (req, res, next) => {
+  try {
+    const cookie = req.cookies;
+    if (cookie?.SESSION_ID) {
+      return res.status(204).send({ msg: "Logout sucessfull" }); //no content in cookie
+    }
+    const SESSION_ID = cookie.SESSION_ID;
+
+    const foundUser = await Users.findOneAndUpdate(
+      {
+        refreshToken: SESSION_ID,
+      },
+      { $inc: { refreshToken: "" } }
+    );
+    
+    res.clearCookie("SESSION_ID", { httpOnly: true });
+    return res.status(204).send({ msg: "Logout sucessfull" });
+  } catch (error) {
+    return res.status(500).json({ msg: "server error", error: error.stack });
+  }
+};
 
 // accessToken time check routr
 module.exports.accessTokenTest = async (req, res, next) => {
