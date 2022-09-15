@@ -1,5 +1,5 @@
 // models used
-const User = require("../Models/usersModel");
+const Users = require("../Models/usersModel");
 const UserVerification = require("../Models/verificationModel");
 
 // utility functions
@@ -16,8 +16,8 @@ module.exports.verifyOTP = async (req, res, next) => {
     const { user, OTP, newpassword } = req.body;
 
     if (user.otp === OTP) {
-      await User.updateOne(
-        { _id: user.user },
+      await Users.updateOne(
+        { _id: Users.user },
         {
           $set: {
             isVerified: true,
@@ -29,8 +29,8 @@ module.exports.verifyOTP = async (req, res, next) => {
       // and because its unverified use not able to log in ultimately they use forgot password
       // in that case verification and password change both work at same time
       if (newpassword !== undefined && newpassword !== "") {
-        await User.updateOne(
-          { _id: user.user },
+        await Users.updateOne(
+          { _id: Users.user },
           {
             $set: {
               password: newpassword,
@@ -54,7 +54,7 @@ module.exports.verifyOTP = async (req, res, next) => {
 module.exports.register = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
-    const emailCheck = await User.findOne({ email: email });
+    const emailCheck = await Users.findOne({ email: email });
     if (emailCheck) {
       return res
         .status(302)
@@ -65,7 +65,7 @@ module.exports.register = async (req, res, next) => {
     const { transporter, OTP, option } = mailit(email);
     await transporter.sendMail(option);
 
-    const user = await User.create({
+    const user = await Users.create({
       email,
       username,
       password,
@@ -94,7 +94,7 @@ module.exports.register = async (req, res, next) => {
 module.exports.forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ email: email });
+    const user = await Users.findOne({ email: email });
     if (!user) {
       return res
         .status(404)
@@ -128,7 +128,7 @@ module.exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    const foundUser = await User.findOne({ email: email });
+    const foundUser = await Users.findOne({ email: email });
     if (!foundUser) {
       return res.status(404).send({ msg: "User not found", status: false });
     }
@@ -153,7 +153,7 @@ module.exports.login = async (req, res, next) => {
       "22d"
     );
 
-    await User.updateOne(
+    await Users.updateOne(
       { _id: foundUser._id },
       {
         $set: {
