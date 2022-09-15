@@ -30,12 +30,6 @@ const userSchema = new mongoose.Schema({
       ref: "Users",
     },
   ],
-  chats: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Chats",
-    },
-  ],
   isVerified: {
     type: Boolean,
     default: false,
@@ -63,11 +57,11 @@ userSchema.pre("updateOne", async function (next) {
     if (!password) {
       next();
     } else {
-      // console.log(password);
+      console.log(password);
       this._update.$set.password = await encrypter(password);
     }
   } catch (error) {
-    console.log("usermodel lin66", error);
+    console.log("usermodel lin66", error.message);
   }
   next();
 });
