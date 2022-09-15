@@ -4,6 +4,7 @@ const {
   register,
   login,
   verifyOTP,
+  logout,
   forgotPassword,
   accessTokenTest,
 } = require("../Controllers/userControllers");
@@ -14,15 +15,15 @@ const {
 } = require("../Middleware/authMiddleware");
 
 const {
-  
   refreshTokenVerification,
 } = require("../Controllers/refreshController");
 
 router.post("/register", register);
 router.post("/login", login);
 router.post("/forgot", forgotPassword);
+router.get("/logout", accessTokenVerification, logout);
 router.get("/refresh-token", refreshTokenVerification);
 router.post("/verify-OTP", OTPVerification, verifyOTP);
-router.get("/test", accessTokenVerification,accessTokenTest);
+router.get("/test", accessTokenVerification, accessTokenTest);
 
 module.exports = router;
