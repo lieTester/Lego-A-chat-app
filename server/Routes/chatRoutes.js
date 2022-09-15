@@ -11,13 +11,17 @@ const {
 const router = require("express").Router();
 const { accessTokenVerification } = require("../Middleware/authMiddleware");
 
+
+// insted of puttin accessTokenVerification middleware here to all chat routes
+// we would put index.js before chatRoute like this
+// app.use("/api/chat", accessTokenVerification, chatRoutes);
 router.post("/", accessTokenVerification, createChat);
 router.get("/", accessTokenVerification, fetchChats);
-router.get("/group/create", createGroup);
-router.get("/group/delete", deleteGroup);
-router.post("/group/add-admin", addAdmin);
-router.post("/group/exit", exitUser); // want to exit from group
-router.post("/group/add-user", addUser); // remove by admin forcefully
-router.post("/group/remove-user", removeUser); // remove by admin forcefully
+router.post("/group/create",accessTokenVerification, createGroup);
+router.post("/group/delete",accessTokenVerification, deleteGroup);
+router.post("/group/add-admin",accessTokenVerification, addAdmin);
+router.post("/group/exit",accessTokenVerification, exitUser); // want to exit from group
+router.post("/group/add-user",accessTokenVerification, addUser); // remove by admin forcefully
+router.post("/group/remove-user",accessTokenVerification, removeUser); // remove by admin forcefully
 
 module.exports = router;
