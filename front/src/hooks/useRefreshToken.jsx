@@ -12,7 +12,7 @@ const useRefreshToken = () => {
       });
       setauth((prev) => {
         // console.log(JSON.stringify(prev));
-        console.log(response);
+        // console.log(response);
         return {
           ...prev,
           accessToken: response.data.token,
