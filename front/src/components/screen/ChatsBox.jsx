@@ -1,54 +1,26 @@
+import { useEffect } from "react";
 import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import user from "../../assets/images/user.png";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import ChatBlock from "./screenSubComponents/ChatBlock";
 
 function ChatsBox() {
-  const [search, setSearch] = useState();
-  const data = [
-    {
-      name: "rinki",
-      message: "ye movie sahi h dekhi tune.",
-      date: "Today 11:50",
-      unseen: 1,
-    },
-    {
-      name: "Adi",
-      message: "bye.",
-      date: "Yesterday",
-      unseen: 2,
-    },
-    {
-      name: "vishal",
-      message:
-        "somthing technical as we always talk about nothing serious. . . .",
-      date: "8/9/2022",
-      unseen: 1,
-    },
-  ];
-  const arrangeData = () => {
-    let overallChat = data.map((value, key) => {
-      return (
-        <ul className="h-auto px-4 flex py-2 hover:bg-prim2 cursor-pointer" key={key}>
-          <li className="relative flex justify-center items-center w-[45px] h-[45px] shadow-[1px_2px_2px_var(--sh-prim1),-1px_-2px_2px_var(--sh-prim2),inset_1px_1px_4px_var(--sh-prim1),inset_-1px_-1px_4px_var(--sh-prim2)]  rounded-full">
-            <img
-              src={user}
-              alt=""
-              className="!w-[42px] !h-[42px] rounded-full p-1"
-            />
-            <label className="absolute bg-seco2 w-[13px] h-[13px]  p-[1px] rounded-full text-[9px] text-prim1 text-center bottom-0 ml-8">
-              {value.unseen}
-            </label>
-          </li>
-          <li className=" relative w-[calc(100%-45px)] pl-4   [&>*]:block">
-            <span className="absolute right-0 text-[12px]">{value.date}</span>
-            <span className="text-prim1">{value.name} </span>
-            <span className="text-[13px]">{value.message}</span>
-          </li>
-        </ul>
-      );
-    });
-    return overallChat;
-  };
+  const [allChats, setAllChats] = useState();
+  const [searchChat, setSearchChat] = useState();
+  const AxiosPrivate = useAxiosPrivate();
+
+  useEffect(() => {
+    const getChats = async () => {
+      const data = await AxiosPrivate.get("/api/chat");
+      if (data) {
+        setAllChats(data.data.chats);
+        // console.log(data.data.chats);
+      }
+    };
+    getChats();
+    return () => {};
+  }, []);
 
   return (
     <div className="relative w-full h-full bg-prim1 sm:border-r-[2px] border-prim2 sm:w-[45%] md:w-[40%] lg:w-[30%] z-[2]">
@@ -66,33 +38,29 @@ function ChatsBox() {
               id="chat-search"
               maxLength={30}
               placeholder="search chats . . ."
+              onChange={(e) => {
+                setSearchChat(e.target.value);
+              }}
+              autocomplete="off"
+              value={searchChat}
               className="w-full outline-none bg-transparent px-2"
             />
           </ul>
         </form>
       </div>
       <div className="relative h-[calc(100%-55px)]  overflow-y-auto pb-2">
-        {/* <ul className="h-auto flex my-3">
-          <li className="relative flex justify-center items-center w-[45px] h-[45px] shadow-[1px_2px_2px_var(--sh-prim1),-1px_-2px_2px_var(--sh-prim2),inset_1px_1px_4px_var(--sh-prim1),inset_-1px_-1px_4px_var(--sh-prim2)]  rounded-full">
-            <img
-              src={user}
-              alt=""
-              className="!w-[42px] !h-[42px] rounded-full p-1"
-            />
-            <label className="absolute bg-seco2 w-[13px] h-[13px]  p-[1px] rounded-full text-[9px] text-prim1 text-center bottom-0 ml-8">
-              1
-            </label>
-          </li>
-          <li className=" relative w-[calc(100%-40px)]  ml-4 [&>*]:block">
-            <span className="absolute right-0 text-[12px]">Today 11:50</span>
-            <label className="text-prim1">rinki </label>
-            <label className="text-[13px]">ye movie sahi h dekhi tune.</label>
-          </li>
-        </ul> */}
-
-        {arrangeData()}
-        {arrangeData()}
-        {arrangeData()}
+        {allChats &&
+          allChats.map((data, index) => {
+            if (searchChat) {
+              // this is a search chat based on key binding
+              // if in data.name search chat string is present at
+              // some index than it return +value or zero else -ve
+              if (data.name.indexOf(searchChat) > -1)
+                return <ChatBlock data={data} key={index} />;
+            } else {
+              return <ChatBlock data={data} key={index} />;
+            }
+          })}
       </div>
     </div>
   );
