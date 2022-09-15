@@ -1,3 +1,5 @@
+const { url } = require('inspector');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
@@ -21,6 +23,9 @@ module.exports = {
 
         "2xl": "1536px",
         // => @media (min-width: 1536px) { ... }
+      },
+      backgroundImage: {
+        msg_bg: "url('/src/assets/images/messageBackground.jpg')",
       },
       fontFamily: {
         caglisotro: ["Cagliostro", "sans-serif"],
