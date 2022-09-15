@@ -3,7 +3,7 @@ import { BiSearch } from "react-icons/bi";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import user from "../../assets/images/user.png";
 import MessageDataContext from "../../context/MessageDataProvider";
-import NoChatDisplayId from "./screenSubComponents/NoChatDisplayId";
+import NoChatDisplay from "./screenSubComponents/NoChatDisplay";
 function MessagesBox() {
   const [messages, setMessages] = useState();
   const { messageData, setMessageData } = useContext(MessageDataContext);
@@ -106,7 +106,7 @@ function MessagesBox() {
       </div>
     </div>
   ) : (
-    <NoChatDisplayId />
+    <NoChatDisplay />
   );
 }
 

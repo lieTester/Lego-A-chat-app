@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import user from "../../assets/images/user.png";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import ChatBlock from "./screenSubComponents/ChatBlock";
 
