@@ -33,7 +33,7 @@ function Remember() {
 
   useEffect(() => {
     console.log(`isLoading: ${isLoading}`);
-    console.log(`aT: ${JSON.stringify(auth?.accessToken)}`);
+    // console.log(`aT: ${JSON.stringify(auth?.accessToken)}`);
   }, [isLoading, auth]);
   return (
     <>
