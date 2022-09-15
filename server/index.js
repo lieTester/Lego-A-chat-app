@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use("/api/auth", userRoutes);
 
 // chat data
-app.use("/api/chat", chatRoutes);
+app.use("/api/chat",  chatRoutes);
 
 // message data
 app.use("/api/message", messageRoutes);
