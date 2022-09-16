@@ -11,15 +11,15 @@ function ChatsBox() {
 
   useEffect(() => {
     const getChats = async () => {
-      const data = await AxiosPrivate.get("/api/chat");
-      if (data) {
-        setAllChats(data.data.chats);
-        // console.log(data.data.chats);
+      const response = await AxiosPrivate.get("/api/chat");
+      if (response) {
+        setAllChats(response.data.chats);
+        // console.log(response.data.chats);
       }
     };
     getChats();
     return () => {};
-  }, []);
+  }, [AxiosPrivate, setAllChats]);
 
   return (
     <div className="relative w-full h-full bg-prim1 sm:border-r-[2px] border-prim2 sm:w-[45%] md:w-[40%] lg:w-[30%] z-[2]">
@@ -40,7 +40,7 @@ function ChatsBox() {
               onChange={(e) => {
                 setSearchChat(e.target.value);
               }}
-              autocomplete="off"
+              autoComplete="off"
               value={searchChat}
               className="w-full outline-none bg-transparent px-2"
             />
@@ -56,9 +56,9 @@ function ChatsBox() {
               // some index than it return +value or zero else -ve
               if (data.name.indexOf(searchChat) > -1)
                 return <ChatBlock data={data} key={index} />;
-            } else {
-              return <ChatBlock data={data} key={index} />;
+              else return "";
             }
+            return <ChatBlock data={data} key={index} />;
           })}
       </div>
     </div>
