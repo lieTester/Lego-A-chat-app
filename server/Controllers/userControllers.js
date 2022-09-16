@@ -145,7 +145,7 @@ module.exports.login = async (req, res, next) => {
       foundUser._id,
       process.env.ACCESS_SECRET_KEY,
       // chnge 1d > 1m after work completed on api
-      "1d"
+      "5m"
     );
     const refreshToken = generateToken(
       { "jwt-token": "refreshToken" },
@@ -180,22 +180,22 @@ module.exports.login = async (req, res, next) => {
 module.exports.logout = async (req, res, next) => {
   try {
     const cookie = req.cookies;
-    if (cookie?.SESSION_ID) {
+    if (!cookie?.SESSION_ID) {
       return res.status(204).send({ msg: "Logout sucessfull" }); //no content in cookie
     }
     const SESSION_ID = cookie.SESSION_ID;
 
-    const foundUser = await Users.findOneAndUpdate(
+    await Users.findOneAndUpdate(
       {
         refreshToken: SESSION_ID,
       },
-      { $inc: { refreshToken: "" } }
+      { $set: { refreshToken: "" } }
     );
-    
     res.clearCookie("SESSION_ID", { httpOnly: true });
     return res.status(204).send({ msg: "Logout sucessfull" });
   } catch (error) {
-    return res.status(500).json({ msg: "server error", error: error.stack });
+    console.error(error.message);
+    return res.status(500).json({ msg: "server error", error: error.message });
   }
 };
 

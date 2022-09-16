@@ -48,7 +48,6 @@ module.exports.fetchChats = async (req, res, next) => {
     const data = await Chats.find(
       {
         users: { $elemMatch: { $eq: user._id } },
-
       },
       { createdAt: 0 }
     )
@@ -58,18 +57,23 @@ module.exports.fetchChats = async (req, res, next) => {
     if (data.length > 0) {
       const allChats = data.map((chat, index) => {
         let info = {};
-        info.id = chat._id;
-        info.date=getTime(chat.updatedAt);
+        // we have to convert id to string so  in both postman testing and front en we send 
+        // id as strig otherwise wile testing from postman we are sending string and from front end it render as objectid
+        info.id = chat._id.toString();
+        info.date = getTime(chat.updatedAt);
         info.group = chat.chatType.isGroup;
         info.message = "no messages available. . .";
-        if (chat?.lastMessage?.text) info.message = chat.lastMessage.text;
+        if (chat?.lastMessage){
+          // console.log(typeof chat.lastMessage)
+          info.message = chat.lastMessage.message.text;
+        } 
         if (chat.chatType.isGroup) {
           info.name = chat.chatname;
           info.admin = chat.chatType.admins.includes(user._id);
         } else {
           info.admin = false;
           info.name =
-            toString(chat.users[0]._id) === toString(user._id)
+            chat.users[0]._id.toString() === user._id.toString()
               ? chat.users[1].username
               : chat.users[0].username;
         }

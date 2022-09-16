@@ -2,15 +2,10 @@
 const User = require("../Models/usersModel");
 
 // utility functions
-const {
-  verifyToken,
-  generateToken,
-  getExpiry,
-} = require("../Utils/utilFunctions");
+const { verifyToken, generateToken } = require("../Utils/utilFunctions");
 
 module.exports.refreshTokenVerification = async (req, res, next) => {
   const cookies = req.cookies;
-
   if (!cookies.SESSION_ID) return res.sendStatus(403);
 
   try {

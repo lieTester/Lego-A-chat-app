@@ -1,55 +1,61 @@
 const Messages = require("../Models/messagesModel");
 const Chats = require("../Models/chatsModel");
+const Users = require("../Models/usersModel");
+
 const { ObjectId } = require("mongodb");
-const { update } = require("../Models/usersModel");
+const { getTime } = require("../Utils/utilFunctions");
 
 module.exports.addMessage = async (req, res, next) => {
   try {
-    const { _idFrom, _idChat, message } = req.body;
+    const { user, chatid, message } = req.body;
 
-    const chat = await Chats.findOne({ _id: _idChat });
+    const chat = await Chats.findOne({ _id: chatid });
     if (!chat) {
-      return res.status(404).json({ message: "Specific chat not found" });
+      return res.status(404).json({ msg: "Specific chat not found" });
     }
-
     const data = await Messages.create({
       message: { text: message },
-      chat: { belongsTo: _idChat },
-      sender: _idFrom,
+      chat: { belongsTo: chat._id },
+      sender: user._id,
     });
     if (data) {
+      chat.set({ lastMessage: data._id });
+      chat.save();
       return res.status(200).json({ msg: "added to database" });
     }
     return res
       .status(417)
       .json({ msg: "Failed to add to databse ", error: " Expectation Failed" });
   } catch (error) {
-    return res.statuse(400).json({ msg: error.stack });
+    return res.statuse(400).json({ msg: error.message });
   }
 };
 module.exports.getMessages = async (req, res, next) => {
   try {
-    const { _idChat, _idFrom } = req.body;
+    const { user, chatid } = req.body;
+
+    const _idChat = ObjectId(chatid);
     const chat = await Chats.findOne({ _id: _idChat });
     if (!chat) {
-      return res.status(404).json({ message: "Specific chat not found" });
+      return res.status(404).json({ msg: "Specific chat not found" });
     }
 
     const allMessages = await Messages.find({
-      chat:{
+      chat: {
         belongsTo: chat._id,
-      }
-    }).sort({updatedAt:1});
-    
+      },
+    }).populate("sender", { username: 1 });
     const chatMessages = allMessages.map((msg) => {
       return {
-        fromself: msg.sender.toString() === _idFrom,
-        chat: msg.message.text,
+        is_me: msg.sender._id.toString() === user._id.toString(),
+        text: msg.message.text,
+        name: msg.sender.username,
+        time: getTime(msg.createdAt),
       };
     });
     return res.status(200).json({ msg: "All messages Retrived", chatMessages });
   } catch (error) {
-    return res.status(400).json({ error: error.stack });
+    return res.status(400).json({ error: error.message });
   }
 };
 
