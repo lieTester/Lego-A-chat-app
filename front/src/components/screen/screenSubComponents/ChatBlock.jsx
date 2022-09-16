@@ -5,7 +5,13 @@ function ChatBlock({ data }) {
   const { setMessageData } = useContext(MessageDataContext);
   const handelCurrentChat = (data) => {
     setMessageData((prev) => {
-      return { ...prev, chat_id: data.id,name:data.name,zIndex:true };
+      return {
+        ...prev,
+        chat_id: data.id,
+        group: data.group,
+        name: data.name,
+        zIndex: true,
+      };
     });
   };
   return (
