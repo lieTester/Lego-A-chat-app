@@ -41,7 +41,7 @@ function MessagesBox() {
 
     getMessages();
     return () => {};
-  }, [messageData?.chat_id]);
+  }, [messageData?.chat_id, AxiosPrivate, setMessageData]);
 
   return messageData?.chat_id ? (
     <div
