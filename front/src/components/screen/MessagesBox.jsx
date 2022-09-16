@@ -10,7 +10,7 @@ import MessageBlock from "./screenSubComponents/MessageBlock";
 
 function MessagesBox() {
   const AxiosPrivate = useAxiosPrivate();
-  const [typeMessage, setTypeMessage] = useState();
+  const [typeMessage, setTypeMessage] = useState({value:''});
   const { messageData, setMessageData } = useContext(MessageDataContext);
 
   const sendMessage = async (e) => {
@@ -94,9 +94,10 @@ function MessagesBox() {
               type="text"
               id="chat-search"
               placeholder="send message . . ."
-              value={typeMessage}
+              value={typeMessage.value}
               onChange={(e) => {
-                setTypeMessage(e.target.value);
+                e.preventDefault();
+                setTypeMessage({value:e.target.value});
               }}
               className="w-full outline-none bg-transparent pl-3 pr-1"
             />
