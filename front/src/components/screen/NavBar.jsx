@@ -1,12 +1,29 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useContext } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { IoIosClose } from "react-icons/io";
 import { AiOutlineUsergroupAdd, AiOutlineInfoCircle } from "react-icons/ai";
 import { FiSettings } from "react-icons/fi";
 import { BiUser, BiMenu, BiSearch } from "react-icons/bi";
 import user from "../../assets/images/user.png";
+import AuthContext from "../../context/AuthProvider";
+import axios from "../../api/apiAxios";
+
 function NavBar() {
+  const { auth } = useContext(AuthContext);
   const [sideBar, setSideBar] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const logout = async () => {
+    // axios for sending http cookie to api
+    const response = await axios.get("api/auth/logout/", {
+      withCredentials: true,
+    });
+    console.log(response.status);
+    if (response.status === 204) {
+      navigate("/login-register", { from: location, replace: true });
+    }
+  };
+
   return (
     <>
       <nav className="w-full h-[42px] z-20 bg-seco2 !py-[6px] flex justify-between text-prim1">
@@ -63,9 +80,11 @@ function NavBar() {
             <ul className="absolute hidden text-sm right-0 w-fit   rounded-sm [&>*]:px-10 [&>*]:py-[3px] [&>*]:bg-seco2  overflow-hidden">
               <li className="w-0 h-[10px] !p-0 "></li>
               <li className="hover:bg-seco1 hover:text-prim3 before:hover:bg-seco1 before:absolute before:!w-4 before:!h-4 before:bg-seco2 brfore:z-[30] before:right-2 before:rotate-45 before:top-1 before:rounded-sm">
-                Puneet
+                {auth.username}
               </li>
-              <li className="hover:text-prim3 hover:bg-seco1">logout</li>
+              <li className="hover:text-prim3 hover:bg-seco1" onClick={logout}>
+                logout
+              </li>
             </ul>
           </div>
         </div>
