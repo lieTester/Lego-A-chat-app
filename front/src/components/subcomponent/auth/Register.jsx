@@ -119,6 +119,7 @@ function Register() {
             placeholder="Username"
             onChange={registerForm.handleChange}
             value={registerForm.values.username}
+            maxLength={12}
           />
           <error className="absolute block text-error bottom-[-24px] right-0">
             {registerForm.errors.username}
