@@ -1,7 +1,7 @@
 import { AiOutlineCloseCircle, AiFillLock } from "react-icons/ai";
 import { MdMarkEmailRead } from "react-icons/md";
 
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import logo from "../../../assets/images/logo2.png";
@@ -10,7 +10,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "../../../api/apiAxios";
 
 function Login({ setForm }) {
-  const { auth, setauth } = useContext(AuthContext);
+  const { setauth } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
