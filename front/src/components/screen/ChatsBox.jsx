@@ -6,7 +6,7 @@ import ChatBlock from "./screenSubComponents/ChatBlock";
 
 function ChatsBox() {
   const [allChats, setAllChats] = useState();
-  const [searchChat, setSearchChat] = useState();
+  const [searchChat, setSearchChat] = useState({value:''});
   const AxiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
@@ -38,10 +38,11 @@ function ChatsBox() {
               maxLength={30}
               placeholder="search chats . . ."
               onChange={(e) => {
-                setSearchChat(e.target.value);
+                e.preventDefault();
+                setSearchChat({value:e.target.value});
               }}
               autoComplete="off"
-              value={searchChat}
+              value={searchChat.value}
               className="w-full outline-none bg-transparent px-2"
             />
           </ul>
