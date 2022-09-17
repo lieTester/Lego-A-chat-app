@@ -1,14 +1,14 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: process.env.REACT_APP_END_POINT,
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "*",
   },
 });
 export const AxiosPrivate = axios.create({
-  baseURL: "http://127.0.0.1:5000",
+  baseURL: process.env.REACT_APP_END_POINT,
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
 });
