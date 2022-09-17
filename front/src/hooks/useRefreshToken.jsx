@@ -17,6 +17,8 @@ const useRefreshToken = () => {
           ...prev,
           accessToken: response.data.token,
           username: response.data.username,
+          id:response.data.id,
+          profile: response.data.profile
         };
       });
       return response.data.accessToken;
