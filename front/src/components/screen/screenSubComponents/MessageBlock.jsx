@@ -1,15 +1,19 @@
-import { useContext } from "react";
+import { useContext,useEffect } from "react";
 import MessageDataContext from "../../../context/MessageDataProvider";
 
 function MessageBlock({ data }) {
+ 
   const { messageData } = useContext(MessageDataContext);
+  useEffect(() => {
+    // currentMsg.current.scrollToView();
+   });
   return (
     <div
       className={
         "w-full  flex " +
         (data.is_me
-          ? "  justify-end [&>*]:rounded-l-lg [&>*]:rounded-tr-lg "
-          : " [&>*]:rounded-r-lg [&>*]:rounded-tl-lg  ")
+          ? "  justify-end [&>*]:rounded-l-[6px] [&>*]:rounded-tr-[6px] "
+          : " [&>*]:rounded-r-[6px] [&>*]:rounded-tl-[6px]  ")
       }
     >
       <ul
@@ -20,10 +24,13 @@ function MessageBlock({ data }) {
       >
         <li
           className={
-            "flex " + (messageData.group ? "justify-between" : "justify-end")
+            "flex " +
+            (messageData.group && !data.is_me
+              ? "justify-between"
+              : "justify-end")
           }
         >
-          {messageData.group && (
+          {messageData.group && !data.is_me && (
             <span className="text-prim3 mt-[-2px] font-bold text-[13px] mr-3">
               {data.name}~
             </span>
