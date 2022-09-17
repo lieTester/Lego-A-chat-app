@@ -24,9 +24,12 @@ module.exports.refreshTokenVerification = async (req, res, next) => {
       "1m"
     );
 
-    return res
-      .status(200)
-      .json({ token: accessToken, username: foundUser.username });
+    return res.status(200).json({
+      token: accessToken,
+      username: foundUser.username,
+      id: foundUser._id,
+      profile: foundUser.profile,
+    });
   } catch (error) {
     res.status(500).json({ msg: "unidentified error", error: error.stack });
   }

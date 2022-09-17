@@ -14,7 +14,7 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "Access-Control-Allow-Origin",
+      // "Access-Control-Allow-Origin",
       "http://192.168.29.62:3000",
       "http://localhost:3000",
     ],
@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use("/api/auth", userRoutes);
 
 // chat data
-app.use("/api/chat",  chatRoutes);
+app.use("/api/chat", chatRoutes);
 
 // message data
 app.use("/api/message", messageRoutes);
@@ -47,6 +47,31 @@ mongoose
     console.log(err.message);
   });
 
-const server = app.listen(process.env.PORT, () => {
-  console.log(`On port ${process.env.PORT}`);
+const port = process.env.PORT || 5000;
+const server = app.listen(port, () => {
+  console.log(`On port ${port}`);
+});
+
+const io = require("socket.io")(server, {
+  pingTimeout: 60000,
+  cors: { origin: "http://localhost:3000" },
+});
+
+io.on("connection", async (socket) => {
+  // console.log("connection successfully", socket.connected);
+  socket.on("disconnect", () => {
+    // console.log("disconnected");
+  });
+  // socket.on("user-online", (user) => {
+  //   console.log("user joined chat : ", chat);
+  //   socket.join(user);
+  // });
+  socket.on("join-chat", (chat) => {
+    console.log("user joined chat : ", chat);
+    socket.join(chat);
+  });
+  socket.on("new-message", (userMessage) => {
+    console.log("new message : ", userMessage);
+    socket.to(userMessage.chatid).emit("emit:new-message", userMessage);
+  });
 });

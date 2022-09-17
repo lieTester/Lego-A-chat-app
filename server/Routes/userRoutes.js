@@ -21,7 +21,7 @@ const {
 router.post("/register", register);
 router.post("/login", login);
 router.post("/forgot", forgotPassword);
-router.get("/logout", accessTokenVerification, logout);
+router.get("/logout",  logout);
 router.get("/refresh-token", refreshTokenVerification);
 router.post("/verify-OTP", OTPVerification, verifyOTP);
 router.get("/test", accessTokenVerification, accessTokenTest);

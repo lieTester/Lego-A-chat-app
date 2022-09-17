@@ -171,6 +171,8 @@ module.exports.login = async (req, res, next) => {
       msg: "Login successfull",
       token: accessToken,
       username: foundUser.username,
+      id: foundUser._id,
+      profile: foundUser.profile,
     });
   } catch (error) {
     return res.status(500).json({ msg: "server error", error: error.stack });

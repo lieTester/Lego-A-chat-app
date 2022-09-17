@@ -4,7 +4,7 @@ const{ accessTokenVerification,
 } = require("../Middleware/authMiddleware");
 
 
-router.post("/addMessage",accessTokenVerification, addMessage);
-router.post("/getMessages",accessTokenVerification, getMessages);
+router.post("/",accessTokenVerification, addMessage);
+router.post("/get-messages",accessTokenVerification, getMessages);
 
 module.exports = router;

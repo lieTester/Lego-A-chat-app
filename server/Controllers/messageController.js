@@ -8,7 +8,7 @@ const { getTime } = require("../Utils/utilFunctions");
 module.exports.addMessage = async (req, res, next) => {
   try {
     const { user, chatid, message } = req.body;
-
+    // console.log(req.body);
     const chat = await Chats.findOne({ _id: chatid });
     if (!chat) {
       return res.status(404).json({ msg: "Specific chat not found" });
@@ -27,7 +27,8 @@ module.exports.addMessage = async (req, res, next) => {
       .status(417)
       .json({ msg: "Failed to add to databse ", error: " Expectation Failed" });
   } catch (error) {
-    return res.statuse(400).json({ msg: error.message });
+    console.log(error.stack);
+    return res.status(400).json({ msg: error.message });
   }
 };
 module.exports.getMessages = async (req, res, next) => {
