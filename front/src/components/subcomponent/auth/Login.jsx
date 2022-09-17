@@ -46,6 +46,8 @@ function Login({ setForm }) {
               ...prev,
               accessToken: response.data.token,
               username: response.data.username,
+              id: response.data.id,
+              profile: response.data.profile,
             };
           });
           toast.success(response.data.msg);
