@@ -10,14 +10,18 @@ function ChatsBox() {
   const AxiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
-    const getChats = async () => {
-      const response = await AxiosPrivate.get("/api/chat");
-      if (response) {
-        setAllChats(response.data.chats);
-        // console.log(response.data.chats);
-      }
-    };
-    getChats();
+    try {
+      const getChats = async () => {
+        const response = await AxiosPrivate.get("/api/chat");
+        if (response) {
+          setAllChats(response.data.chats);
+          // console.log(response.data.chats);
+        }
+      };
+      getChats();
+    } catch (error) {
+      console.error(error);
+    }
     return () => {};
   }, [AxiosPrivate, setAllChats]);
 
@@ -51,11 +55,11 @@ function ChatsBox() {
       <div className="relative h-[calc(100%-55px)]  overflow-y-auto pb-2">
         {allChats &&
           allChats.map((data, index) => {
-            if (searchChat) {
+            if (searchChat.value) {
               // this is a search chat based on key binding
               // if in data.name search chat string is present at
               // some index than it return +value or zero else -ve
-              if (data.name.indexOf(searchChat) > -1)
+              if (data.name.indexOf(searchChat.value) > -1)
                 return <ChatBlock data={data} key={index} />;
               else return "";
             }
