@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import AuthContext from "../context/AuthProvider";
-import { MessageDataProvider } from "../context/MessageDataProvider";
+import { ChatInfoProvider } from "../context/ChatInfoProvider";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import MessagesBox from "./screen/MessagesBox";
 import NavBar from "./screen/NavBar";
@@ -35,7 +35,7 @@ function Home() {
   //   };
   // },[]);
   return (
-    <MessageDataProvider>
+    <ChatInfoProvider>
       <div className="relative h-screen  text-prim2 font-baloo ">
         <NavBar />
         <div className="relative h-[calc(100%-44px)] flex z-10">
@@ -43,7 +43,7 @@ function Home() {
           <MessagesBox />
         </div>
       </div>
-    </MessageDataProvider>
+    </ChatInfoProvider>
   );
 }
 export default Home;
