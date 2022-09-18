@@ -1,12 +1,11 @@
-import { useContext,useEffect } from "react";
-import MessageDataContext from "../../../context/MessageDataProvider";
+import { useContext, useEffect } from "react";
+import ChatInfoContext from "../../../context/ChatInfoProvider";
 
 function MessageBlock({ data }) {
- 
-  const { messageData } = useContext(MessageDataContext);
+  const { chatInfo } = useContext(ChatInfoContext);
   useEffect(() => {
     // currentMsg.current.scrollToView();
-   });
+  });
   return (
     <div
       className={
@@ -19,18 +18,16 @@ function MessageBlock({ data }) {
       <ul
         className={
           " !max-w-[70%]  overflow-hidden " +
-          (messageData.group ? " !min-w-[70px] " : " !min-w-[40px] ")
+          (chatInfo.group ? " !min-w-[70px] " : " !min-w-[40px] ")
         }
       >
         <li
           className={
             "flex " +
-            (messageData.group && !data.is_me
-              ? "justify-between"
-              : "justify-end")
+            (chatInfo.group && !data.is_me ? "justify-between" : "justify-end")
           }
         >
-          {messageData.group && !data.is_me && (
+          {chatInfo.group && !data.is_me && (
             <span className="text-prim3 mt-[-2px] font-bold text-[13px] mr-3">
               {data.name}~
             </span>
