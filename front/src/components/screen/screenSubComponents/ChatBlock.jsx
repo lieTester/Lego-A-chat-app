@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import user from "../../../assets/images/user.png";
-import MessageDataContext from "../../../context/MessageDataProvider";
+import ChatInfoContext from "../../../context/ChatInfoProvider";
 function ChatBlock({ data }) {
-  const { setMessageData } = useContext(MessageDataContext);
+  const { setChatInfo } = useContext(ChatInfoContext);
   const handelCurrentChat = (data) => {
-    setMessageData((prev) => {
+    setChatInfo((prev) => {
       return {
         ...prev,
         chat_id: data.id,
