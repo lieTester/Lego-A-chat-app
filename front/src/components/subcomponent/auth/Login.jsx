@@ -63,8 +63,12 @@ function Login({ setForm }) {
     },
     validate: (values) => {
       let errors = {};
+      const emailregex =
+        /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
       if (!values.email) {
         errors.email = "Email is required";
+      } else if (!emailregex.test(values.email)) {
+        errors.email = "Please enter a valid email address";
       } else if (!values.password) {
         errors.password = "Password is required";
       }
