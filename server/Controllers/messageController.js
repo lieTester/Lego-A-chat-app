@@ -13,15 +13,32 @@ module.exports.addMessage = async (req, res, next) => {
     if (!chat) {
       return res.status(404).json({ msg: "Specific chat not found" });
     }
-    const data = await Messages.create({
+    const messageData = await Messages.create({
       message: { text: message },
       chat: { belongsTo: chat._id },
       sender: user._id,
     });
-    if (data) {
-      chat.set({ lastMessage: data._id });
+    if (messageData) {
+      const result = await Messages.findOne(
+        { _id: messageData._id },
+        { message: 1, chat: 1, sender: 1, _id: 1 }
+      )
+        .populate({
+          path: "chat",
+          populate: { path: "belongsTo", select: "users" },
+        })
+        .populate("sender", { username: 1, _id: 1 });
+
+      chat.set({ lastMessage: messageData._id });
       chat.save();
-      return res.status(200).json({ msg: "added to database" });
+      return res.status(200).json({
+        text: result.message.text,
+        sender: result.sender,
+        chatId: result.chat.belongsTo._id,
+        messageId: result._id,
+        users: result.chat.belongsTo.users,
+        time: getTime(new Date()),
+      });
     }
     return res
       .status(417)
@@ -34,7 +51,7 @@ module.exports.addMessage = async (req, res, next) => {
 module.exports.getMessages = async (req, res, next) => {
   try {
     const { user, chatid } = req.body;
-
+    console.log(req.body);
     const _idChat = ObjectId(chatid);
     const chat = await Chats.findOne({ _id: _idChat });
     if (!chat) {
