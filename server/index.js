@@ -59,19 +59,40 @@ const io = require("socket.io")(server, {
 
 io.on("connection", async (socket) => {
   // console.log("connection successfully", socket.connected);
-  socket.on("disconnect", () => {
-    // console.log("disconnected");
+  socket.on("disconnect", (user) => {
+    console.log("disconnected");
   });
-  // socket.on("user-online", (user) => {
-  //   console.log("user joined chat : ", chat);
-  //   socket.join(user);
-  // });
+
+  // use it to emit message to user currently online and we had a message for them from any one of its beonging chat
+  socket.on("user-online", (user) => {
+    console.log("user-login : ", user);
+    socket.join(user);
+  });
+  // use it to emit message to user-loginout
+  socket.on("user-offline", (user) => {
+    console.log("user-logout : ", user);
+    socket.leave(user);
+  });
+
+  // this will use to send for typing signal to user currently in particular chat
   socket.on("join-chat", (chat) => {
     console.log("user joined chat : ", chat);
     socket.join(chat);
   });
-  socket.on("new-message", (userMessage) => {
-    console.log("new message : ", userMessage);
-    socket.to(userMessage.chatid).emit("emit:new-message", userMessage);
+
+  // on recieve message from user currently active and send others related to it who are online
+  socket.on("new-message", (chatData) => {
+    console.log("new message ");
+    chatData.users.forEach((user) => {
+      if (user === chatData.sender._id) return;
+      console.log(user);
+      socket.in(user).emit("emit:new-message", {
+        time: chatData.time,
+        text: chatData.text,
+        chatId: chatData.chatId,
+        messageId: chatData.messageId,
+        name: chatData.sender.username,
+      });
+    });
   });
 });
