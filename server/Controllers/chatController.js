@@ -13,29 +13,61 @@ module.exports.createChat = async (req, res, next) => {
     const _idUser1 = user._id;
     const _idUser2 = ObjectId(connect);
 
-    await Users.updateOne(
-      { _id: _idUser1 },
+    const isInContact = await Users.findOne(
       {
-        $push: {
-          contacts: _idUser2,
-        },
-      }
+        _id: _idUser1,
+      },
+      { contacts: 1 }
     );
-    await Users.updateOne(
-      { _id: _idUser2 },
-      {
-        $push: {
-          contacts: _idUser1,
-        },
+    if (isInContact.contacts.indexOf(_idUser2) > -1) {
+      // if user already in cotacts of current user
+      const chat = await Chats.find({
+        $or: [
+          {
+            users: [_idUser2, _idUser1],
+          },
+          {
+            users: [_idUser1, _idUser2],
+          },
+        ],
+      });
+      if (!chat) {
+        return res.status(404).json({ msg: "Specific chat not found" });
       }
-    );
-    // console.log(_idUser1,_idUser2);
-    const data = await Chats.create({
-      users: [_idUser1, _idUser2],
-      chatType: { isGroup: false, admins: [_idUser1, _idUser2] },
-    });
-    if (data) {
-      return res.status(200).json({ msg: "Chat created" });
+      const finduser = await Users.findOne({ _id: _idUser2 });
+      return res.status(200).json({
+        msg: "Already in contacts",
+        id: chat[0]._id,
+        name: finduser.username,
+      });
+    } else if (connect) {
+      await Users.updateOne(
+        { _id: _idUser1 },
+        {
+          $push: {
+            contacts: _idUser2,
+          },
+        }
+      );
+      await Users.updateOne(
+        { _id: _idUser2 },
+        {
+          $push: {
+            contacts: _idUser1,
+          },
+        }
+      );
+      // console.log(_idUser1,_idUser2);
+      const response = await Chats.create({
+        users: [_idUser1, _idUser2],
+        chatType: { isGroup: false, admins: [_idUser1, _idUser2] },
+      });
+      const finduser = await Users.findOne({ _id: _idUser2 });
+      return res.status(200).json({
+        msg: "chat created successfully",
+        id: response._id,
+        name: finduser.username,
+      });
     }
     return res.status(400).json({ msg: "Failed to create chat" });
   } catch (error) {
@@ -57,16 +89,16 @@ module.exports.fetchChats = async (req, res, next) => {
     if (data.length > 0) {
       const allChats = data.map((chat, index) => {
         let info = {};
-        // we have to convert id to string so  in both postman testing and front en we send 
+        // we have to convert id to string so  in both postman testing and front en we send
         // id as strig otherwise wile testing from postman we are sending string and from front end it render as objectid
         info.id = chat._id.toString();
         info.date = getTime(chat.updatedAt);
         info.group = chat.chatType.isGroup;
         info.message = "no messages available. . .";
-        if (chat?.lastMessage){
+        if (chat?.lastMessage) {
           // console.log(typeof chat.lastMessage)
           info.message = chat.lastMessage.message.text;
-        } 
+        }
         if (chat.chatType.isGroup) {
           info.name = chat.chatname;
           info.admin = chat.chatType.admins.includes(user._id);
