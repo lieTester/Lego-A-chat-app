@@ -51,7 +51,6 @@ module.exports.addMessage = async (req, res, next) => {
 module.exports.getMessages = async (req, res, next) => {
   try {
     const { user, chatid } = req.body;
-    console.log(req.body);
     const _idChat = ObjectId(chatid);
     const chat = await Chats.findOne({ _id: _idChat });
     if (!chat) {
