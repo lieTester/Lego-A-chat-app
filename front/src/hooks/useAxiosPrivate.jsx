@@ -5,7 +5,7 @@ import useRefreshToken from "./useRefreshToken";
 import { AxiosPrivate } from "../api/apiAxios";
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
-  const { auth} = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
 
   useEffect(() => {
     const requestIntercept = AxiosPrivate.interceptors.request.use(
@@ -20,9 +20,12 @@ const useAxiosPrivate = () => {
     );
 
     const responseIntercept = AxiosPrivate.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        return response;
+      },
       async (error) => {
         const prevRequest = error?.config;
+        // here sent is just a flag you can name it
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true;
           const newAccessToken = await refresh();
