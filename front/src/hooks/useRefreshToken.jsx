@@ -21,7 +21,7 @@ const useRefreshToken = () => {
           profile: response.data.profile
         };
       });
-      return response.data.accessToken;
+      return response.data.token;
     } catch (error) {
       console.error(error);
     }
