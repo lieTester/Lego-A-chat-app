@@ -200,6 +200,27 @@ module.exports.logout = async (req, res, next) => {
     return res.status(500).json({ msg: "server error", error: error.message });
   }
 };
+// add user profile image
+module.exports.profile = async (req, res, next) => {
+  try {
+    const { user, avatar } = req.body;
+
+    const profile = await Users.findOneAndUpdate(
+      {
+        _id: user._id,
+      },
+      { $set: { profile: avatar } }
+    );
+    if (profile) return res.status(200).send({ msg: "profile update success" });
+
+    return res
+      .status(400)
+      .json({ msg: "someting went wrong", error: error.message });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({ msg: "server error", error: error.message });
+  }
+};
 
 // accessToken time check routr
 module.exports.accessTokenTest = async (req, res, next) => {
