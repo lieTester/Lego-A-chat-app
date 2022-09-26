@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { IoIosClose } from "react-icons/io";
 import { AiOutlineUsergroupAdd, AiOutlineInfoCircle } from "react-icons/ai";
@@ -7,12 +7,16 @@ import { BiUser, BiMenu, BiSearch } from "react-icons/bi";
 import user from "../../assets/images/user.png";
 import AuthContext from "../../context/AuthProvider";
 import axios from "../../api/apiAxios";
-
+import io from "socket.io-client";
+var socket;
 function NavBar() {
   const { auth } = useContext(AuthContext);
   const [sideBar, setSideBar] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  useEffect(() => {
+    socket = io(process.env.REACT_APP_END_POINT);
+  }, []);
   const logout = async () => {
     // axios for sending http cookie to api
     const response = await axios.get("api/auth/logout/", {
@@ -20,6 +24,7 @@ function NavBar() {
     });
     console.log(response.status);
     if (response.status === 204) {
+      socket.emit("user-offline", auth.id);
       navigate("/login-register", { from: location, replace: true });
     }
   };
@@ -71,16 +76,23 @@ function NavBar() {
             <ul>
               <li className="relative flex justify-center items-center w-[35px] h-[35px] bg-prim1 rounded-full">
                 <img
-                  src={user}
+                  src={
+                    auth?.profile
+                      ? `data:image/svg+xml;base64,${auth.profile}`
+                      : user
+                  }
                   alt=""
                   className="!w-[30px] !h-[30px] rounded-full p-1"
                 />
               </li>
             </ul>
-            <ul className="absolute hidden text-sm right-0 w-fit   rounded-sm [&>*]:px-10 [&>*]:py-[3px] [&>*]:bg-seco2  overflow-hidden">
+            <ul className="absolute hidden text-sm text-center  right-0 w-fit   rounded-sm [&>*]:px-10 [&>*]:py-[3px] [&>*]:bg-seco2  overflow-hidden">
               <li className="w-0 h-[10px] !p-0 "></li>
               <li className="hover:bg-seco1 hover:text-prim3 before:hover:bg-seco1 before:absolute before:!w-4 before:!h-4 before:bg-seco2 brfore:z-[30] before:right-2 before:rotate-45 before:top-1 before:rounded-sm">
                 {auth.username}
+              </li>
+              <li className="hover:text-prim3 hover:bg-seco1">
+                <Link to="/set-avatar">avatar</Link>
               </li>
               <li className="hover:text-prim3 hover:bg-seco1" onClick={logout}>
                 logout
@@ -106,13 +118,28 @@ function NavBar() {
               <IoIosClose size={40} />
             </span>
             <ul className="relative w-fit p-2 top-[30px] bg-prim2 rounded-full">
-              <img
-                src={user}
-                alt=""
-                className="w-[40px] h-[40px] rounded-full"
-              />
+              <Link to="/set-avatar">
+                <img
+                  src={
+                    auth?.profile
+                      ? `data:image/svg+xml;base64,${auth.profile}`
+                      : user
+                  }
+                  alt=""
+                  className="w-[40px] h-[40px] rounded-full"
+                />
+              </Link>
             </ul>
-            <span className="absolute bottom-[20px]">Puneet Khandal</span>
+            <span className="absolute bottom-[20px] text-lg text-prim1">
+              {auth.username}
+            </span>
+
+            <span
+              className="absolute cursor-pointer bottom-[20px] bg-error text-prim1 right-4 px-2 py-[2px] rounded-sm"
+              onClick={logout}
+            >
+              logout
+            </span>
           </div>
           <ul className="relative text-prim1 mx-auto [&>a>*]:cursor-pointer [&>a>*]:p-3  [&>a>*]:!w-full [&>a>*]:flex  ">
             <Link to="/new-group">

@@ -1,29 +1,32 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useContext, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import ChatBlock from "./screenSubComponents/ChatBlock";
-
+import ChatInfoContext from "../../context/ChatInfoProvider";
 function ChatsBox() {
-  const [allChats, setAllChats] = useState();
-  const [searchChat, setSearchChat] = useState({value:''});
+  const [searchChat, setSearchChat] = useState({ value: "" });
   const AxiosPrivate = useAxiosPrivate();
+  const { chatInfo, setChatInfo } = useContext(ChatInfoContext);
 
   useEffect(() => {
-    try {
-      const getChats = async () => {
-        const response = await AxiosPrivate.get("/api/chat");
-        if (response) {
-          setAllChats(response.data.chats);
-          // console.log(response.data.chats);
-        }
-      };
-      getChats();
-    } catch (error) {
-      console.error(error);
-    }
+    const getChats = async () => {
+      await AxiosPrivate.get("/api/chat")
+        .catch((error) => {
+          console.error(error);
+        })
+        .then((response) => {
+          setChatInfo((prev) => {
+            return { ...prev, allChats: response.data.chats };
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+    getChats();
+
     return () => {};
-  }, [AxiosPrivate, setAllChats]);
+  }, [AxiosPrivate, setChatInfo]);
 
   return (
     <div className="relative w-full h-full bg-prim1 sm:border-r-[2px] border-prim2 sm:w-[45%] md:w-[40%] lg:w-[30%] z-[2]">
@@ -43,7 +46,7 @@ function ChatsBox() {
               placeholder="search chats . . ."
               onChange={(e) => {
                 e.preventDefault();
-                setSearchChat({value:e.target.value});
+                setSearchChat({ value: e.target.value });
               }}
               autoComplete="off"
               value={searchChat.value}
@@ -53,8 +56,8 @@ function ChatsBox() {
         </form>
       </div>
       <div className="relative h-[calc(100%-55px)]  overflow-y-auto pb-2">
-        {allChats &&
-          allChats.map((data, index) => {
+        {chatInfo?.allChats &&
+          chatInfo.allChats.map((data, index) => {
             if (searchChat.value) {
               // this is a search chat based on key binding
               // if in data.name search chat string is present at

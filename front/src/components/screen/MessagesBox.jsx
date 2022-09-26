@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext, useRef, useCallback } from "react";
 import { BiSearch } from "react-icons/bi";
 import { BsFillArrowLeftCircleFill, BsThreeDotsVertical } from "react-icons/bs";
 import user from "../../assets/images/user.png";
@@ -29,29 +29,40 @@ function MessagesBox() {
 
   // setting a socket connection
   useEffect(() => {
-    socket = io(process.env.REACT_APP_END_POINT);
-    socket.emit("user-online", auth.id);
+    if (auth?.id) {
+      socket = io(process.env.REACT_APP_END_POINT);
+      socket.emit("user-online", auth.id);
+    }
   }, [auth?.id]);
 
   // setting a current on chat connection
   useEffect(() => {
-    if (chatInfo.chat_id) {
+    if (chatInfo.current_chatId) {
       setLoding(true);
-      USER_CURRENT_CHAT_ROOM = chatInfo.chat_id;
-      socket.emit("join-chat", chatInfo.chat_id);
+      USER_CURRENT_CHAT_ROOM = chatInfo.current_chatId;
+      socket.emit("join-chat", chatInfo.current_chatId);
     }
-  }, [chatInfo?.chat_id]);
+  }, [chatInfo?.current_chatId]);
 
-  // reciving instant message for this chat
-  useEffect(() => {
-    socket.on("emit:new-message", (message) => {
+  const receiveNewMessage = useCallback((message) => {
+    // we are useing this if condition because useEffect try
+    // recive a emmit:new message more than it expected but only once we recive data
+    // so we try to change when we get data
+    // wanna understand this  above comment print console log before if statement
+    // you'll understant.
+
+    if (message) {
       console.log(
         USER_CURRENT_CHAT_ROOM,
         message.chatId,
         message.messageId,
-        USER_LAST_MESSAGE
+        USER_LAST_MESSAGE,
+        USER_CURRENT_CHAT_ROOM === message.chatId,
+        message.text
       );
-      if (
+
+      if (USER_CURRENT_CHAT_ROOM !== message.chatId) {
+      } else if (
         USER_CURRENT_CHAT_ROOM === message.chatId &&
         message.messageId !== USER_LAST_MESSAGE
       ) {
@@ -61,32 +72,48 @@ function MessagesBox() {
           { time: message.time, text: message.text, name: message.name },
         ]);
       }
-    });
+    }
+  }, []);
+
+  // reciving instant message for this chat
+  useEffect(() => {
+    socket.on("emit:new-message", receiveNewMessage);
+    return () => {
+      socket.off("emit:new-message", receiveNewMessage);
+    };
   });
 
   // for receiveing messages on load
   useEffect(() => {
-    try {
-      const getMessages = async () => {
-        // console.log(chatInfo.chat_id, "this");
-        const response = await AxiosPrivate.post(
-          "/api/message/get-messages",
-          JSON.stringify({ chatid: chatInfo.chat_id })
-        );
-        if (response.status === 200) {
+    const controller = new AbortController();
+    const getMessages = async () => {
+      // console.log(chatInfo.current_chatId, "this");
+      await AxiosPrivate.post(
+        "/api/message/get-messages",
+        JSON.stringify({
+          chatid: chatInfo.current_chatId,
+        }),
+        { signal: controller.signal }
+      )
+        .then((response) => {
           setLoding(false);
           setAllMessages(response.data.chatMessages);
-        }
-      };
-      if (chatInfo.chat_id) {
-        // console.log("getting chatInfo");
-        getMessages();
-      }
-    } catch (error) {
-      console.error(error.message);
+        })
+        .catch((error) => {
+          console.log(error, "get-message");
+          console.error(error.message);
+        });
+    };
+    if (chatInfo.current_chatId) {
+      // console.log("getting chatInfo");
+      getMessages();
     }
-    return () => {};
-  }, [chatInfo?.chat_id, AxiosPrivate, setChatInfo]);
+
+    return () => {
+      setLoding(false);
+      controller.abort();
+    };
+  }, [AxiosPrivate, chatInfo?.current_chatId]);
 
   // sending latest message data from user to server
   const sendMessage = async (e) => {
@@ -95,11 +122,11 @@ function MessagesBox() {
       const response = await AxiosPrivate.post(
         "/api/message/",
         JSON.stringify({
-          chatid: chatInfo.chat_id,
+          chatid: chatInfo.current_chatId,
           message: newMessage.value,
         })
       );
-      if (response.status === 200) {
+      if (response?.status === 200) {
         setNewMessage({ value: "" });
         // console.log(response.data);
         setAllMessages((prev) => [
@@ -108,7 +135,7 @@ function MessagesBox() {
             is_me: true,
             time: response.data.time,
             text: response.data.text,
-            group: chatInfo.group,
+            group: chatInfo.current_isGroup,
           },
         ]);
         socket.emit("new-message", response.data);
@@ -117,13 +144,11 @@ function MessagesBox() {
       console.error(error.message);
     }
   };
-  return isLoding ? (
-    <NoChatDisplay />
-  ) : (
+  return chatInfo?.current_chatId ? (
     <div
       className={
         "absolute   w-full h-full bg-msg_bg bg-cover sm:relative  sm:w-[55%] md:w-[60%] lg:w-[70%] " +
-        (chatInfo.zIndex ? "z-[2]" : "z-[1]")
+        (chatInfo.messageBox.zIndex ? "z-[2]" : "z-[1]")
       }
     >
       <div className="relative h-[calc(100%-55px)] overflow-y-auto  pb-2 pt-[65px] text-prim1 text-[15px] [&>*]:px-4 [&>section>div>ul]:relative [&>section>div>ul]:w-fit [&>section>div>ul]:px-1  [&>section>div>ul]:bg-seco2 [&>section>div>ul]:mb-2  ">
@@ -133,7 +158,7 @@ function MessagesBox() {
               className=" sm:hidden mr-2 my-auto cursor-pointer"
               onClick={() => {
                 setChatInfo((prev) => {
-                  return { ...prev, zIndex: false };
+                  return { ...prev, messageBox: { zIndex: false } };
                 });
               }}
             >
@@ -141,14 +166,18 @@ function MessagesBox() {
             </li>
             <li className="relative flex justify-center items-center w-[45px] h-[45px] shadow-[1px_2px_2px_var(--sh-prim1),-1px_-2px_2px_var(--sh-prim2),inset_1px_1px_4px_var(--sh-prim1),inset_-1px_-1px_4px_var(--sh-prim2)]  rounded-full">
               <img
-                src={user}
+                src={
+                  chatInfo?.current_chatProfile
+                    ? `data:image/svg+xml;base64,${chatInfo.current_chatProfile}`
+                    : user
+                }
                 alt=""
                 className="!w-[42px] !h-[42px] rounded-full p-1 cursor-pointer"
               />
             </li>
             <li className=" relative w-[calc(100%-100px)] pl-4   [&>*]:block sm:w-[calc(100%-40px)]">
               <span className="absolute right-0 text-[12px]"></span>
-              <span className="text-prim1">{chatInfo.name} </span>
+              <span className="text-prim1">{chatInfo.current_chatName} </span>
               <span className="text-[13px]">online</span>
             </li>
             <li className="mt-3 cursor-pointer">
@@ -158,10 +187,13 @@ function MessagesBox() {
         </div>
 
         <section>
-          {allMessages &&
+          {isLoding ? (
+            <center>...Loding</center>
+          ) : (
             allMessages.map((data, index) => {
               return <MessageBlock data={data} key={index} />;
-            })}
+            })
+          )}
         </section>
 
         <section ref={messageBoxScroll} id="sample-view-for-scroll"></section>
@@ -191,6 +223,8 @@ function MessagesBox() {
         </form>
       </div>
     </div>
+  ) : (
+    <NoChatDisplay />
   );
 }
 
