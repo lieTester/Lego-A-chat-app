@@ -83,7 +83,7 @@ module.exports.fetchChats = async (req, res, next) => {
       },
       { createdAt: 0 }
     )
-      .populate("users", { username: 1 })
+      .populate("users", { username: 1, profile: 1 })
       .populate("lastMessage", { message: { text: 1 } });
     // console.log(data, data[0].updatedAt.getDate());
     if (data.length > 0) {
@@ -104,6 +104,10 @@ module.exports.fetchChats = async (req, res, next) => {
           info.admin = chat.chatType.admins.includes(user._id);
         } else {
           info.admin = false;
+          info.profile =
+            chat.users[0]._id.toString() === user._id.toString()
+              ? chat.users[1]?.profile
+              : chat.users[0]?.profile;
           info.name =
             chat.users[0]._id.toString() === user._id.toString()
               ? chat.users[1].username
