@@ -8,6 +8,7 @@ import ContactsBox from "./components/screen/ContactsBox";
 import ChatsBox from "./components/screen/ChatsBox";
 import NewGroup from "./components/screen/NewGroup";
 import SettingsBox from "./components/screen/SettingsBox";
+import SetAvatar from "./components/SetAvatar";
 
 function App() {
   return (
@@ -21,9 +22,10 @@ function App() {
             <Route path="/" element={<ChatsBox />} />
             <Route path="search" element={<SearchBox />} />
             <Route path="contacts" element={<ContactsBox />} />
-            <Route path="new-group" element={<NewGroup/>} />
+            <Route path="new-group" element={<NewGroup />} />
             <Route path="settings" element={<SettingsBox />} />
           </Route>
+          <Route path="set-avatar" element={<SetAvatar />} />
         </Route>
       </Routes>
     </div>
