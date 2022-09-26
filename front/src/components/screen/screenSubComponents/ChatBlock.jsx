@@ -7,10 +7,13 @@ function ChatBlock({ data }) {
     setChatInfo((prev) => {
       return {
         ...prev,
-        chat_id: data.id,
-        group: data.group,
-        name: data.name,
-        zIndex: true,
+        current_chatId: data.id,
+        current_isGroup: data.group,
+        current_chatName: data.name,
+        current_chatProfile: data.profile,
+        messageBox: {
+          zIndex: true,
+        },
       };
     });
   };
@@ -23,7 +26,9 @@ function ChatBlock({ data }) {
     >
       <li className="relative flex justify-center items-center w-[45px] h-[45px] shadow-[1px_2px_2px_var(--sh-prim1),-1px_-2px_2px_var(--sh-prim2),inset_1px_1px_4px_var(--sh-prim1),inset_-1px_-1px_4px_var(--sh-prim2)]  rounded-full">
         <img
-          src={user}
+          src={
+            data?.profile ? `data:image/svg+xml;base64,${data.profile}` : user
+          }
           alt=""
           className="!w-[42px] !h-[42px] rounded-full p-1"
         />

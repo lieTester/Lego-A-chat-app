@@ -18,16 +18,16 @@ function MessageBlock({ data }) {
       <ul
         className={
           " !max-w-[70%]  overflow-hidden " +
-          (chatInfo.group ? " !min-w-[70px] " : " !min-w-[40px] ")
+          (chatInfo.current_isGroup ? " !min-w-[70px] " : " !min-w-[40px] ")
         }
       >
         <li
           className={
             "flex " +
-            (chatInfo.group && !data.is_me ? "justify-between" : "justify-end")
+            (chatInfo.current_isGroup && !data.is_me ? "justify-between" : "justify-end")
           }
         >
-          {chatInfo.group && !data.is_me && (
+          {chatInfo.current_isGroup && !data.is_me && (
             <span className="text-prim3 mt-[-2px] font-bold text-[13px] mr-3">
               {data.name}~
             </span>
