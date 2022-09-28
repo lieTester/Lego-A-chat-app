@@ -2,7 +2,7 @@ const Chats = require("../Models/chatsModel");
 const Users = require("../Models/usersModel");
 const Messages = require("../Models/messagesModel");
 const { ObjectId } = require("mongodb");
-const { getTime } = require("../Utils/utilFunctions");
+const { getTime, makeAvatar } = require("../Utils/utilFunctions");
 
 module.exports.createChat = async (req, res, next) => {
   try {
@@ -134,7 +134,11 @@ module.exports.createGroup = async (req, res, next) => {
     const data = await Chats.create({
       chatname: name,
       users: _idUsers,
-      chatType: { isGroup: true, admins: _idAdmin },
+      chatType: {
+        isGroup: true,
+        profile: await makeAvatar(name),
+        admins: _idAdmin,
+      },
     });
     if (data) {
       return res.status(200).json({ msg: "Chat group created successfully" });

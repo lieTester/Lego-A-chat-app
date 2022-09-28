@@ -17,6 +17,9 @@ const chatSchema = new mongoose.Schema(
         required: true,
         default: false,
       },
+      profile:{
+        type:String,
+      },
       admins: [
         {
           type: mongoose.Schema.Types.ObjectId,
