@@ -53,7 +53,7 @@ module.exports.verifyOTP = async (req, res, next) => {
 // register user
 module.exports.register = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, profile } = req.body;
     const emailCheck = await Users.findOne({ email: email });
     if (emailCheck) {
       return res
@@ -69,6 +69,7 @@ module.exports.register = async (req, res, next) => {
       email,
       username,
       password,
+      profile
     });
 
     const token = await UserVerification.create({
