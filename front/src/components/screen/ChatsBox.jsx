@@ -15,9 +15,11 @@ function ChatsBox() {
           console.error(error);
         })
         .then((response) => {
-          setChatInfo((prev) => {
-            return { ...prev, allChats: response.data.chats };
-          });
+          if (response.status === 200) {
+            setChatInfo((prev) => {
+              return { ...prev, allChats: response.data.chats };
+            });
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -31,7 +33,13 @@ function ChatsBox() {
   return (
     <div className="relative w-full h-full bg-prim1 sm:border-r-[2px] border-prim2 sm:w-[45%] md:w-[40%] lg:w-[30%] z-[2]">
       <div className=" h-[55px]  px-4 py-1">
-        <form action="" className="w-full py-1 ">
+        <form
+          action=""
+          className="w-full py-1 "
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
           <ul className="relative flex border-[2px] p-[1px] border-prim2 rounded-full   ">
             <label
               htmlFor="chat-search"
@@ -62,7 +70,7 @@ function ChatsBox() {
               // this is a search chat based on key binding
               // if in data.name search chat string is present at
               // some index than it return +value or zero else -ve
-              if (data.name.indexOf(searchChat.value) > -1)
+              if (data.name.toLowerCase().indexOf(searchChat.value.toLowerCase()) > -1)
                 return <ChatBlock data={data} key={index} />;
               else return "";
             }
