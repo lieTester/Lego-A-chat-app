@@ -8,7 +8,7 @@ const { verifyToken } = require("../Utils/utilFunctions");
 module.exports.OTPVerification = async (req, res, next) => {
   const possible =
     req.headers.authorization && req.headers.authorization.startsWith("Bearer");
-  console.log(req.body, req.headers);
+  // console.log(req.body, req.headers);
   if (possible) {
     try {
       // console.log(req.headers["authorization"]);
