@@ -30,7 +30,7 @@ const useCreateAvatar = () => {
     }
     context.fillText(letters, canvas.width / 2, canvas.height / 2);
 
-    return canvas.toDataURL("image/svg+xml");
+    return canvas.toDataURL("image/png");
   };
   return makeAvatar;
 };
