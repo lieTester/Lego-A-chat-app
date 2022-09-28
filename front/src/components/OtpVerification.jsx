@@ -56,7 +56,7 @@ function OtpVerification() {
       return errors;
     },
   });
-  console.log(otpForm.values);
+  
   return (
     <div className=" font-baloo  text-prim2 min-h-screen  flex  w-full py-4">
       <center className="m-auto w-full sm:w-[60%] lg:w-[50%] xl:w-[30%] h-fit max-h-[calc(100%-40px)] ">
