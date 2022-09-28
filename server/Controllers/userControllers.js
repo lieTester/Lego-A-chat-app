@@ -7,6 +7,7 @@ const {
   generateToken,
   decrypter,
   getExpiry,
+  makeAvatar,
 } = require("../Utils/utilFunctions");
 const { mailit } = require("../Utils/mail");
 
@@ -63,13 +64,13 @@ module.exports.register = async (req, res, next) => {
 
     // send mail with defined transport object
     const { transporter, OTP, option } = mailit(email);
-    // await transporter.sendMail(option);
+    await transporter.sendMail(option);
 
     const user = await Users.create({
-      email,
-      username,
-      password,
-      profile
+      email: email,
+      username: username,
+      password: password,
+      profile: await makeAvatar(username),
     });
 
     const token = await UserVerification.create({
@@ -87,7 +88,10 @@ module.exports.register = async (req, res, next) => {
       ),
     });
   } catch (error) {
-    return res.status(400).send({ msg: "Registeration not sucessfull", error });
+    console.error(error);
+    return res
+      .status(500)
+      .send({ msg: "Registeration not sucessfull", error: error.message });
   }
 };
 
@@ -120,7 +124,7 @@ module.exports.forgotPassword = async (req, res, next) => {
       ),
     });
   } catch (error) {
-    return res.status(400).send({ error });
+    return res.status(500).send({ error: error.message });
   }
 };
 
