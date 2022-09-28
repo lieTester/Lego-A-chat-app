@@ -117,7 +117,7 @@ module.exports.fetchChats = async (req, res, next) => {
       });
       return res.status(200).json({ chats: allChats });
     }
-    return res.status(400).json({ msg: "Server error" });
+    return res.status(204).json({ msg: "None content" });
   } catch (error) {
     return res.status(500).json(error.message);
   }
@@ -156,7 +156,7 @@ module.exports.deleteGroup = async (req, res, next) => {
     await Chats.deleteOne({ _id: _idChat });
     return res.status(200).json({ msg: "Deleted successfully" });
   } catch (error) {
-    return res.status(400).json({ msg: error.message });
+    return res.status(500).json({ msg: error.message });
   }
 };
 
@@ -178,7 +178,7 @@ module.exports.addAdmin = async (req, res, next) => {
     );
     return res.status(200).json({ msg: "Add as admin" });
   } catch (error) {
-    return res.status(400).json({ msg: error.message });
+    return res.status(500).json({ msg: error.message });
   }
 };
 module.exports.addUser = async (req, res, next) => {
@@ -197,7 +197,7 @@ module.exports.addUser = async (req, res, next) => {
     );
     return res.status(200).json({ msg: "Added to group" });
   } catch (error) {
-    return res.status(400).json({ msg: error.message });
+    return res.status(500).json({ msg: error.message });
   }
 };
 module.exports.exitUser = async (req, res, next) => {
@@ -238,6 +238,6 @@ module.exports.removeUser = async (req, res, next) => {
     );
     return res.status(200).json({ msg: "Removed from group" });
   } catch (error) {
-    return res.status(400).json({ msg: error.message });
+    return res.status(500).json({ msg: error.message });
   }
 };
