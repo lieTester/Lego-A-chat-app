@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-
+const { createCanvas } = require("canvas");
 // time string genaratior
 exports.getTime = (date) => {
   let todaysDate = new Date();
@@ -49,14 +49,13 @@ exports.decrypter = async (password, hash) => {
   return result;
 };
 
-exports.makeAvatar = (name) => {
+exports.makeAvatar = async (name) => {
   const colorGenerator = () => {
     const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    document.body.style.backgroundColor = "#" + randomColor;
     return "#" + randomColor;
   };
 
-  const canvas = document.createElement("canvas");
+  const canvas = createCanvas();
   const context = canvas.getContext("2d");
 
   canvas.width = 200;
@@ -67,18 +66,18 @@ exports.makeAvatar = (name) => {
   context.fillRect(0, 0, canvas.width, canvas.height);
 
   // Draw text
-  context.font = "bold 100px Assistant";
+  context.font = "bold 100px Impact";
   context.fillStyle = "white";
   context.textAlign = "center";
   context.textBaseline = "middle";
   let letters;
   const nameParts = name.split(" ");
-  if (nameParts.length > 1 && !nameParts[nameParts.length - 1].empty()) {
+  if (nameParts.length > 1 && nameParts[nameParts.length - 1]!=="") {
     letters = nameParts[0][0] + nameParts[nameParts.length - 1][0];
   } else {
     letters = nameParts[0][0] + nameParts[0][1];
   }
-  console.log(nameParts, letters);
+  // console.log(nameParts, letters);
   context.fillText(letters, canvas.width / 2, canvas.height / 2);
 
   return canvas.toDataURL("image/png");
