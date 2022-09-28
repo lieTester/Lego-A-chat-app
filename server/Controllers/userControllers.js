@@ -17,7 +17,7 @@ module.exports.verifyOTP = async (req, res, next) => {
 
     if (user.otp === OTP) {
       await Users.updateOne(
-        { _id: Users.user },
+        { _id: user.user },
         {
           $set: {
             isVerified: true,
@@ -30,7 +30,7 @@ module.exports.verifyOTP = async (req, res, next) => {
       // in that case verification and password change both work at same time
       if (newpassword !== undefined && newpassword !== "") {
         await Users.updateOne(
-          { _id: Users.user },
+          { _id: user.user },
           {
             $set: {
               password: newpassword,
@@ -63,7 +63,7 @@ module.exports.register = async (req, res, next) => {
 
     // send mail with defined transport object
     const { transporter, OTP, option } = mailit(email);
-    await transporter.sendMail(option);
+    // await transporter.sendMail(option);
 
     const user = await Users.create({
       email,
