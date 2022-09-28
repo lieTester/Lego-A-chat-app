@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, useRef, useCallback } from "react";
-import { BiSearch } from "react-icons/bi";
+import { RiSendPlaneFill } from "react-icons/ri";
 import { BsFillArrowLeftCircleFill, BsThreeDotsVertical } from "react-icons/bs";
 import user from "../../assets/images/user.png";
 import ChatInfoContext from "../../context/ChatInfoProvider";
@@ -96,8 +96,10 @@ function MessagesBox() {
         { signal: controller.signal }
       )
         .then((response) => {
-          setLoding(false);
-          setAllMessages(response.data.chatMessages);
+          if(response){
+            setLoding(false);
+            setAllMessages(response.data.chatMessages);
+          }
         })
         .catch((error) => {
           console.log(error, "get-message");
@@ -168,7 +170,7 @@ function MessagesBox() {
               <img
                 src={
                   chatInfo?.current_chatProfile
-                    ? `data:image/svg+xml;base64,${chatInfo.current_chatProfile}`
+                    ? chatInfo.current_chatProfile
                     : user
                 }
                 alt=""
@@ -215,9 +217,9 @@ function MessagesBox() {
             />
             <button
               type="submit"
-              className=" text-prim1 p-[6px]  bg-prim2 rounded-full"
+              className=" text-prim1 p-[6px]  bg-prim2 rounded-full rotate-45"
             >
-              <BiSearch size={20} />
+              <RiSendPlaneFill size={20} />
             </button>
           </ul>
         </form>
