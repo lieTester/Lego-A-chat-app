@@ -54,7 +54,7 @@ function SetAvatar() {
       await AxiosAvatar.get(`/${Math.round(Math.random() * 1000)}`)
         .then((response) => {
           const buffer = new Buffer(response.data);
-          data.push(buffer.toString("base64"));
+          data.push(`data:image/svg+xml;base64,${buffer.toString("base64")}`);
         })
         .catch((error) => {
           //   console.error(error);
@@ -107,11 +107,7 @@ function SetAvatar() {
                   }
                   onClick={() => setSelectedAvatar(index)}
                 >
-                  <img
-                    src={`data:image/svg+xml;base64,${avatar}`}
-                    alt=""
-                    className="w-[70px] mx-auto"
-                  />
+                  <img src={avatar} alt="" className="w-[70px] mx-auto" />
                 </span>
               );
             })
