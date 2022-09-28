@@ -39,6 +39,7 @@ module.exports.createChat = async (req, res, next) => {
         msg: "Already in contacts",
         id: chat[0]._id,
         name: finduser.username,
+        profile: finduser.profile,
       });
     } else if (connect) {
       await Users.updateOne(
@@ -67,6 +68,7 @@ module.exports.createChat = async (req, res, next) => {
         msg: "chat created successfully",
         id: response._id,
         name: finduser.username,
+        profile: finduser.profile,
       });
     }
     return res.status(400).json({ msg: "Failed to create chat" });
@@ -101,6 +103,7 @@ module.exports.fetchChats = async (req, res, next) => {
         }
         if (chat.chatType.isGroup) {
           info.name = chat.chatname;
+          info.profile = chat.chatType.profile;
           info.admin = chat.chatType.admins.includes(user._id);
         } else {
           info.admin = false;
