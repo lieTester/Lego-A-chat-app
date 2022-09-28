@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import user from "../../../assets/images/user.png";
 import ChatInfoContext from "../../../context/ChatInfoProvider";
 function ChatBlock({ data }) {
@@ -17,6 +17,7 @@ function ChatBlock({ data }) {
       };
     });
   };
+
   return (
     <ul
       className="h-auto px-4 flex py-2 hover:bg-prim2 cursor-pointer"
@@ -26,9 +27,7 @@ function ChatBlock({ data }) {
     >
       <li className="relative flex justify-center items-center w-[45px] h-[45px] shadow-[1px_2px_2px_var(--sh-prim1),-1px_-2px_2px_var(--sh-prim2),inset_1px_1px_4px_var(--sh-prim1),inset_-1px_-1px_4px_var(--sh-prim2)]  rounded-full">
         <img
-          src={
-            data?.profile ? `data:image/svg+xml;base64,${data.profile}` : user
-          }
+          src={data?.profile ? data.profile : user}
           alt=""
           className="!w-[42px] !h-[42px] rounded-full p-1"
         />
@@ -41,7 +40,9 @@ function ChatBlock({ data }) {
       <li className=" relative w-[calc(100%-45px)] pl-4   [&>*]:block">
         <span className="absolute right-0 text-[12px]">{data.date}</span>
         <span className="text-prim1">{data.name} </span>
-        <span className="text-[13px]">{data.message}</span>
+        <span className="text-[13px] w-[60%] overflow-hidden text-ellipsis ">
+          {data.message}
+        </span>
       </li>
     </ul>
   );
