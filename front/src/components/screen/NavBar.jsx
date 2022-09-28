@@ -78,7 +78,7 @@ function NavBar() {
                 <img
                   src={
                     auth?.profile
-                      ? `data:image/svg+xml;base64,${auth.profile}`
+                      ? auth.profile
                       : user
                   }
                   alt=""
@@ -122,7 +122,7 @@ function NavBar() {
                 <img
                   src={
                     auth?.profile
-                      ? `data:image/svg+xml;base64,${auth.profile}`
+                      ? auth.profile
                       : user
                   }
                   alt=""
