@@ -39,6 +39,7 @@ function SearchBox() {
             current_chatId: response.data.id,
             current_isGroup: false,
             current_chatName: response.data.name,
+            current_chatProfile: response.data.profile,
             messageBox: {
               zIndex: true,
             },
@@ -87,7 +88,7 @@ function SearchBox() {
               >
                 <li className="relative flex justify-center items-center w-[45px] h-[45px] shadow-[1px_2px_2px_var(--sh-prim1),-1px_-2px_2px_var(--sh-prim2),inset_1px_1px_4px_var(--sh-prim1),inset_-1px_-1px_4px_var(--sh-prim2)]  rounded-full">
                   <img
-                    src={profile}
+                    src={user?.profile ? user.profile : profile}
                     alt=""
                     className="!w-[42px] !h-[42px] rounded-full p-1"
                   />
