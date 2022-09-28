@@ -1,19 +1,23 @@
 import { useContext } from "react";
 import { useFormik } from "formik";
 
+import axios from "../../../api/apiAxios";
+import logo from "../../../assets/images/logo2.png";
+import AuthContext from "../../../context/AuthProvider";
+import useCreateAvatar from "../../../hooks/useCreateAvatar";
+
+import { FaUser } from "react-icons/fa";
+import { MdMarkEmailRead } from "react-icons/md";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AiOutlineCloseCircle, AiFillLock } from "react-icons/ai";
-import { MdMarkEmailRead } from "react-icons/md";
-import { FaUser } from "react-icons/fa";
+
 import { toast } from "react-toastify";
-import axios from "../../../api/apiAxios";
-import AuthContext from "../../../context/AuthProvider";
-import logo from "../../../assets/images/logo2.png";
 
 function Register() {
   const { setauth } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
+  const makerAvatar = useCreateAvatar();
 
   const registerForm = useFormik({
     initialValues: {
@@ -24,12 +28,15 @@ function Register() {
     },
     onSubmit: async (values) => {
       try {
+        const user_profile = makerAvatar(values.username);
+
         const response = await axios.post(
           "/api/auth/register",
           JSON.stringify({
             username: values.username,
             email: values.email,
             password: values.password,
+            profile:user_profile
           }),
           {
             headers: { "Content-Type": "application/json" },
@@ -119,7 +126,7 @@ function Register() {
             placeholder="Username"
             onChange={registerForm.handleChange}
             value={registerForm.values.username}
-            maxLength={12}
+            maxLength={20}
           />
           <error className="absolute block text-error bottom-[-24px] right-0">
             {registerForm.errors.username}
