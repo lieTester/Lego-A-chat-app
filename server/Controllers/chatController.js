@@ -2,7 +2,7 @@ const Chats = require("../Models/chatsModel");
 const Users = require("../Models/usersModel");
 const Messages = require("../Models/messagesModel");
 const { ObjectId } = require("mongodb");
-const { getTime, makeAvatar } = require("../Utils/utilFunctions");
+const { getTime, getDate, makeAvatar } = require("../Utils/utilFunctions");
 
 module.exports.createChat = async (req, res, next) => {
   try {
@@ -79,14 +79,15 @@ module.exports.createChat = async (req, res, next) => {
 module.exports.fetchChats = async (req, res, next) => {
   try {
     const { user } = req.body;
-    const data = await Chats.find(
-      {
-        users: { $elemMatch: { $eq: user._id } },
-      },
-      { createdAt: 0 }
-    )
+    const data = await Chats.find({
+      users: { $elemMatch: { $eq: user._id } },
+    })
       .populate("users", { username: 1, profile: 1 })
-      .populate("lastMessage", { message: { text: 1 } });
+      .populate("lastMessage", {
+        message: { text: 1 },
+      })
+      .sort({ lastMessage: "desc" });
+
     // console.log(data, data[0].updatedAt.getDate());
     if (data.length > 0) {
       const allChats = data.map((chat, index) => {
@@ -94,7 +95,8 @@ module.exports.fetchChats = async (req, res, next) => {
         // we have to convert id to string so  in both postman testing and front en we send
         // id as strig otherwise wile testing from postman we are sending string and from front end it render as objectid
         info.id = chat._id.toString();
-        info.date = getTime(chat.updatedAt);
+        info.date = getDate(chat.updatedAt);
+        info.time = getTime(chat.updatedAt);
         info.group = chat.chatType.isGroup;
         info.message = "no messages available. . .";
         if (chat?.lastMessage) {
