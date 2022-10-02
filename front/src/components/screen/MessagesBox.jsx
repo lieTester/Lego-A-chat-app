@@ -96,7 +96,7 @@ function MessagesBox() {
         { signal: controller.signal }
       )
         .then((response) => {
-          if(response){
+          if (response) {
             setLoding(false);
             setAllMessages(response.data.chatMessages);
           }
@@ -149,12 +149,12 @@ function MessagesBox() {
   return chatInfo?.current_chatId ? (
     <div
       className={
-        "absolute   w-full h-full bg-msg_bg bg-cover sm:relative  sm:w-[55%] md:w-[60%] lg:w-[70%] " +
+        "absolute w-full h-full overflow-hidden   bg-msg_bg bg-cover sm:relative  sm:w-[55%] md:w-[60%] lg:w-[70%] " +
         (chatInfo.messageBox.zIndex ? "z-[2]" : "z-[1]")
       }
     >
-      <div className="relative h-[calc(100%-55px)] overflow-y-auto  pb-2 pt-[65px] text-prim1 text-[15px] [&>*]:px-4 [&>section>div>ul]:relative [&>section>div>ul]:w-fit [&>section>div>ul]:px-1  [&>section>div>ul]:bg-seco2 [&>section>div>ul]:mb-2  ">
-        <div className="fixed w-full h-[55px] top-[42px]  bg-prim1 z-[20] sm:w-[55%] md:w-[60%] lg:w-[70%]">
+      <div className="relative h-[calc(100%-55px)] text-prim1 text-[15px] [&>*]:px-4 [&>section>div>ul]:relative [&>section>div>ul]:w-fit [&>section>div>ul]:px-1  [&>section>div>ul]:bg-seco2 [&>section>div>ul]:mb-2  ">
+        <div className="relative w-full h-[55px]  bg-prim1  ">
           <ul className="h-auto !w-full flex !p-0 !pt-1 !bg-transparent ">
             <li
               className=" sm:hidden mr-2 my-auto cursor-pointer"
@@ -188,7 +188,7 @@ function MessagesBox() {
           </ul>
         </div>
 
-        <section>
+        <section className=" w-full h-[calc(100%-45px)] overflow-y-auto py-3">
           {isLoding ? (
             <center>...Loding</center>
           ) : (
@@ -196,11 +196,10 @@ function MessagesBox() {
               return <MessageBlock data={data} key={index} />;
             })
           )}
+          <span ref={messageBoxScroll} id="sample-view-for-scroll"></span>
         </section>
-
-        <section ref={messageBoxScroll} id="sample-view-for-scroll"></section>
       </div>
-      <div className="absolute w-full bg-prim1 bottom-0 h-[55px] px-4  py-1">
+      <div className="relative w-full bg-prim1 h-[55px] px-4  py-1">
         <form action="" className="w-full py-1 " onSubmit={sendMessage}>
           <ul className="relative flex border-[2px] p-[1px] border-prim2 rounded-full   ">
             <input
