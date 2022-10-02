@@ -11,7 +11,7 @@ import io from "socket.io-client";
 
 // use state fluctuate so most recent chat id
 // if sender chat id and ours match, then we show to messageBox
-var socket, USER_CURRENT_CHAT_ROOM, USER_LAST_MESSAGE;
+var socket, USER_CURRENT_CHAT_ROOM, USER_LAST_MESSAGE, prevDate;
 
 function MessagesBox() {
   const AxiosPrivate = useAxiosPrivate();
@@ -193,7 +193,9 @@ function MessagesBox() {
             <center>...Loding</center>
           ) : (
             allMessages.map((data, index) => {
-              return <MessageBlock data={data} key={index} />;
+              const change = prevDate !== data.date;
+              prevDate = data.date;
+              return <MessageBlock data={data} key={index} change={change} />;
             })
           )}
           <span ref={messageBoxScroll} id="sample-view-for-scroll"></span>
