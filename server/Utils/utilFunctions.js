@@ -2,19 +2,21 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { createCanvas } = require("canvas");
 // time string genaratior
-exports.getTime = (date) => {
+exports.getDate = (date) => {
   let todaysDate = new Date();
-
-  if (date.getDate() === todaysDate.getDate()) {
-    let hour = date.getHours() % 12 || 12;
-    let minute = date.getMinutes() % 60 || 0;
-    let isAm = date.getHours() < 12 ? "am" : "pm";
-    return `${hour}:${minute} ${isAm}`;
-  }
   let curr = todaysDate.getDate();
+  if (date.getDate() === todaysDate.getDate()) return "today";
   todaysDate.setDate(curr - 1);
   if (date.getDate() === todaysDate.getDate()) return "yesterday";
   return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+};
+exports.getTime = (date) => {
+  let hour = date.getHours() % 12 || 12;
+  let minute = date.getMinutes() % 60 || 0;
+  let isAm = date.getHours() < 12 ? "am" : "pm";
+  return `${(hour < 10 ? "0" : "") + hour}:${
+    (minute < 10 ? "0" : "") + minute
+  } ${isAm}`;
 };
 
 // get days method
@@ -72,7 +74,7 @@ exports.makeAvatar = async (name) => {
   context.textBaseline = "middle";
   let letters;
   const nameParts = name.split(" ");
-  if (nameParts.length > 1 && nameParts[nameParts.length - 1]!=="") {
+  if (nameParts.length > 1 && nameParts[nameParts.length - 1] !== "") {
     letters = nameParts[0][0] + nameParts[nameParts.length - 1][0];
   } else {
     letters = nameParts[0][0] + nameParts[0][1];
