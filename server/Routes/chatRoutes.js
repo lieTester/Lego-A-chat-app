@@ -8,7 +8,7 @@ const {
   addUser,
   removeUser,
 } = require("../Controllers/chatController");
-const { userSearch } = require("../Controllers/searchController");
+const { userSearch, fetchUsers } = require("../Controllers/searchController");
 const router = require("express").Router();
 const { accessTokenVerification } = require("../Middleware/authMiddleware");
 
@@ -18,6 +18,7 @@ const { accessTokenVerification } = require("../Middleware/authMiddleware");
 router.post("/", accessTokenVerification, createChat);
 router.get("/", accessTokenVerification, fetchChats);
 router.post("/search", accessTokenVerification, userSearch);
+router.get("/contacts", accessTokenVerification, fetchUsers);
 router.post("/group/create", accessTokenVerification, createGroup);
 router.post("/group/delete", accessTokenVerification, deleteGroup);
 router.post("/group/add-admin", accessTokenVerification, addAdmin);
