@@ -77,7 +77,7 @@ function SearchBox() {
           </ul>
         </form>
       </div>
-      <section className="px-4">
+      <section className="px-4 h-[calc(100%-55px)]">
         {userSearchResult &&
           userSearchResult.map((user, index) => {
             return (
