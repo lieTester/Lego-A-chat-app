@@ -3,7 +3,7 @@ const Chats = require("../Models/chatsModel");
 const Users = require("../Models/usersModel");
 
 const { ObjectId } = require("mongodb");
-const { getTime } = require("../Utils/utilFunctions");
+const { getTime, getDate } = require("../Utils/utilFunctions");
 
 module.exports.addMessage = async (req, res, next) => {
   try {
@@ -67,6 +67,7 @@ module.exports.getMessages = async (req, res, next) => {
         is_me: msg.sender._id.toString() === user._id.toString(),
         text: msg.message.text,
         name: msg.sender.username,
+        date: getDate(msg.createdAt),
         time: getTime(msg.createdAt),
       };
     });
