@@ -49,7 +49,7 @@ function NewGroup() {
           JSON.stringify({ users: added, name: values.name })
         )
           .then((response) => {
-             navigate(from, { replace: true });
+            navigate(from, { replace: true });
           })
           .catch((error) => {
             console.error(error);
@@ -70,7 +70,13 @@ function NewGroup() {
   return (
     <div className="relative w-full h-full bg-prim1 sm:border-r-[2px] border-prim2 sm:w-[45%] md:w-[40%] lg:w-[30%] z-[2]">
       <div className=" h-[55px]  px-4 py-1">
-        <form action="" className="w-full py-1 ">
+        <form
+          action=""
+          className="w-full py-1 "
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
           <ul className="relative flex border-[2px] p-[1px] border-prim2 rounded-full   ">
             <label
               htmlFor="chat-search"
@@ -104,34 +110,39 @@ function NewGroup() {
       >
         {userContacts &&
           userContacts.map((user, index) => {
-            return (
-              <ul
-                key={index}
-                className="h-auto w-[120px] my-1  p-1   rounded-[3px] hover:bg-prim2 "
-                onClick={() => {}}
-              >
-                <li className="relative mx-auto flex justify-center items-center w-[45px] h-[45px] shadow-[1px_2px_2px_var(--sh-prim1),-1px_-2px_2px_var(--sh-prim2),inset_1px_1px_4px_var(--sh-prim1),inset_-1px_-1px_4px_var(--sh-prim2)]  rounded-full">
-                  <img
-                    src={user?.profile ? user.profile : profile}
-                    alt=""
-                    className="!w-[42px] !h-[42px] rounded-full p-1"
-                  />
-                </li>
-                <li className=" relative mx-auto my-[2px]  [&>*]:block text-center">
-                  <span className="text-prim1 ">{user.name}</span>
-                  <span
-                    onClick={manageGroupMembr}
-                    id={user.id}
-                    className={
-                      "relative text-prim1 text-sm mt-[2px]  rounded-[2px] cursor-pointer before:absolute before:inset-0  " +
-                      (added.indexOf(user.id) > -1 ? "bg-error" : "bg-seco2")
-                    }
-                  >
-                    {added.indexOf(user.id) > -1 ? "Remove" : "Add"}
-                  </span>
-                </li>
-              </ul>
-            );
+            if (
+              user.name.toLowerCase().indexOf(userSearch.value.toLowerCase()) > -1 ||
+              added.indexOf(user.id) > -1
+            ) {
+              return (
+                <ul
+                  key={index}
+                  className="h-auto w-[120px] my-1  p-1   rounded-[3px] hover:bg-prim2 "
+                  onClick={() => {}}
+                >
+                  <li className="relative mx-auto flex justify-center items-center w-[45px] h-[45px] shadow-[1px_2px_2px_var(--sh-prim1),-1px_-2px_2px_var(--sh-prim2),inset_1px_1px_4px_var(--sh-prim1),inset_-1px_-1px_4px_var(--sh-prim2)]  rounded-full">
+                    <img
+                      src={user?.profile ? user.profile : profile}
+                      alt=""
+                      className="!w-[42px] !h-[42px] rounded-full p-1"
+                    />
+                  </li>
+                  <li className=" relative mx-auto my-[2px]  [&>*]:block text-center">
+                    <span className="text-prim1 ">{user.name}</span>
+                    <span
+                      onClick={manageGroupMembr}
+                      id={user.id}
+                      className={
+                        "relative text-prim1 text-sm mt-[2px]  rounded-[2px] cursor-pointer before:absolute before:inset-0  " +
+                        (added.indexOf(user.id) > -1 ? "bg-error" : "bg-seco2")
+                      }
+                    >
+                      {added.indexOf(user.id) > -1 ? "Remove" : "Add"}
+                    </span>
+                  </li>
+                </ul>
+              );
+            }
           })}
       </section>
       {/* if list has value */}
