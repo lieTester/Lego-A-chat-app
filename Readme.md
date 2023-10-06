@@ -9,10 +9,12 @@ Lego A Chat App is a full-stack MERN (MongoDB, Express.js, React, Node.js) proje
 
 The project boasts an impressive user interface and rich functionality, making it a promising solution for real-time chat applications.
 
-![Chat App Screenshot 1](./docs/Screenshot1.png)
-![Chat App Screenshot 2](./docs/Screenshot2.png)
-![Chat App Screenshot 3](./docs/Screenshot3.png)
-![Chat App Screenshot 3](./docs/Screenshot4.png)
+<div>
+<img src="docs/Screenshot1.png" alt="Login page" width="45%" height="200" />
+<img src="docs/Screenshot2.png" alt="Home Page" width="45%" height="200" />
+<img src="docs/Screenshot3.png" alt="Users sidbar" width="45%" height="200" />
+<img src="docs/Screenshot4.png" alt="select Avatars" width="45%" height="200" />
+</div>
 
 ## Tech Stack
 
@@ -37,7 +39,7 @@ Contributions are welcome! Feel free to open issues or submit pull requests to h
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](./License) file for details.
 
 ## Acknowledgments
 
