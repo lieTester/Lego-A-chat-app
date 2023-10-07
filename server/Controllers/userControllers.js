@@ -141,11 +141,9 @@ module.exports.login = async (req, res, next) => {
          !(await decrypter(password, foundUser.password)) ||
          foundUser.isVerified === false;
       if (fail) {
-         return res
-            .status(400)
-            .send({
-               msg: "Email or Password incorrect or User not verified yet",
-            });
+         return res.status(400).send({
+            msg: "Email or Password incorrect or User not verified yet",
+         });
       }
       // console.log(foundUser);
       const accessToken = generateToken(
@@ -171,7 +169,8 @@ module.exports.login = async (req, res, next) => {
 
       res.cookie("SESSION_ID", refreshToken, {
          httpOnly: true,
-         secure: true, // with secure we cannot work at localhost
+         secure: process.env.NODE_ENV === "production" ? true : false, // with secure we cannot work at localhost
+         sameSite: "none",
          maxAge: getExpiry(22),
       });
       return res.status(200).json({
