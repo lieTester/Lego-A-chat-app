@@ -3,6 +3,7 @@ const nodeExternals = require("webpack-node-externals");
 const Dotenv = require("dotenv-webpack");
 
 module.exports = {
+   mode: "production",
    entry: "./index.js", // point this to your express app file
    target: "node",
    externals: [nodeExternals()],

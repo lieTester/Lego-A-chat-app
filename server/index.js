@@ -12,14 +12,14 @@ require("dotenv").config();
 const app = express();
 
 app.use(
-  cors({
-    origin: [
-      // "Access-Control-Allow-Origin",
-      "http://192.168.29.62:3000",
-      "http://localhost:3000",
-    ],
-    credentials: true,
-  })
+   cors({
+      origin: [
+         // "Access-Control-Allow-Origin",
+         "http://192.168.29.62:3000",
+         "http://localhost:3000",
+      ],
+      credentials: true,
+   })
 );
 app.use(express.json());
 
@@ -36,63 +36,63 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 
 mongoose
-  .connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("Mogodb working");
-  })
-  .catch((err) => {
-    console.log(err.message);
-  });
+   .connect(process.env.MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+   })
+   .then(() => {
+      console.log("Mogodb working");
+   })
+   .catch((err) => {
+      console.log(err.message);
+   });
 
 const port = process.env.PORT || 5000;
 const server = app.listen(port, () => {
-  console.log(`On port ${port}`);
+   console.log(`On port ${port}`);
 });
 
 const io = require("socket.io")(server, {
-  pingTimeout: 60000,
-  cors: { origin: "http://localhost:3000" },
+   pingTimeout: 60000,
+   cors: { origin: "http://localhost:3000" },
 });
 
 io.on("connection", async (socket) => {
-  // console.log("connection successfully", socket.connected);
-  socket.on("disconnect", (user) => {
-    console.log("disconnected");
-  });
+   // console.log("connection successfully", socket.connected);
+   socket.on("disconnect", (user) => {
+      console.log("disconnected");
+   });
 
-  // use it to emit message to user currently online and we had a message for them from any one of its beonging chat
-  socket.on("user-online", (user) => {
-    console.log("user-login : ", user);
-    socket.join(user);
-  });
-  // use it to emit message to user-loginout
-  socket.on("user-offline", (user) => {
-    console.log("user-logout : ", user);
-    socket.leave(user);
-  });
+   // use it to emit message to user currently online and we had a message for them from any one of its beonging chat
+   socket.on("user-online", (user) => {
+      console.log("user-login : ", user);
+      socket.join(user);
+   });
+   // use it to emit message to user-loginout
+   socket.on("user-offline", (user) => {
+      console.log("user-logout : ", user);
+      socket.leave(user);
+   });
 
-  // this will use to send for typing signal to user currently in particular chat
-  socket.on("join-chat", (chat) => {
-    console.log("user joined chat : ", chat);
-    socket.join(chat);
-  });
+   // this will use to send for typing signal to user currently in particular chat
+   socket.on("join-chat", (chat) => {
+      console.log("user joined chat : ", chat);
+      socket.join(chat);
+   });
 
-  // on recieve message from user currently active and send others related to it who are online
-  socket.on("new-message", (chatData) => {
-    console.log("new message ");
-    chatData.users.forEach((user) => {
-      if (user === chatData.sender._id) return;
-      console.log(user);
-      socket.in(user).emit("emit:new-message", {
-        time: chatData.time,
-        text: chatData.text,
-        chatId: chatData.chatId,
-        messageId: chatData.messageId,
-        name: chatData.sender.username,
+   // on recieve message from user currently active and send others related to it who are online
+   socket.on("new-message", (chatData) => {
+      console.log("new message ");
+      chatData.users.forEach((user) => {
+         if (user === chatData.sender._id) return;
+         console.log(user);
+         socket.in(user).emit("emit:new-message", {
+            time: chatData.time,
+            text: chatData.text,
+            chatId: chatData.chatId,
+            messageId: chatData.messageId,
+            name: chatData.sender.username,
+         });
       });
-    });
-  });
+   });
 });

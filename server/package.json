@@ -6,8 +6,10 @@
    "author": "lietester.00",
    "license": "MIT",
    "scripts": {
-      "start": "nodemon server.js",
-      "build": "webpack"
+      "start": "node index.js",
+      "start:dev": "webpack --config webpack.config.js --mode=development -w",
+      "start:prod": "webpack --config webpack.config.js --mode=production -w",
+      "build": "webpack --config webpack.config.js --mode=production"
    },
    "dependencies": {
       "bcryptjs": "^2.4.3",
