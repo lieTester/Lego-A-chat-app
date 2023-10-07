@@ -15,8 +15,7 @@ app.use(
    cors({
       origin: [
          // "Access-Control-Allow-Origin",
-         "http://192.168.29.62:3000",
-         "http://localhost:3000",
+         process.env.FRONT_HOSTS,
       ],
       credentials: true,
    })
