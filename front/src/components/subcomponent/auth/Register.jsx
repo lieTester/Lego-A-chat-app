@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useState } from "react";
 import { useFormik } from "formik";
 
 import axios from "../../../api/apiAxios";
@@ -13,15 +13,11 @@ import { AiOutlineCloseCircle, AiFillLock } from "react-icons/ai";
 import { toast } from "react-toastify";
 
 function Register() {
-   const { setauth, auth } = useContext(AuthContext);
+   const [loading, setLoading] = useState(false);
+   const { setauth } = useContext(AuthContext);
    const navigate = useNavigate();
    const location = useLocation();
-   useEffect(() => {
-      const from = location.state?.from?.pathname || "/";
-      if (auth?.accessToken) {
-         navigate(from, { replace: true });
-      }
-   }, [auth]);
+
    const registerForm = useFormik({
       initialValues: {
          username: "",
@@ -31,6 +27,7 @@ function Register() {
       },
       onSubmit: async (values) => {
          try {
+            setLoading(true);
             const response = await axios.post(
                "/api/auth/register",
                JSON.stringify({
@@ -55,10 +52,9 @@ function Register() {
                }, 3000);
             }
          } catch (error) {
-            // console.error(error);
+            setLoading(false);
             toast.error(error.response.data.msg);
          }
-         // tmppass =sefe12@Q
       },
       validate: (values) => {
          let errors = {};
@@ -255,7 +251,17 @@ function Register() {
             )}
             <ul className="relative  bg-prim2 rounded-[5px] text-prim1 shadow-[.5px_.5px_2px_var(--sh-prim1),-.5px_-.5px_2px_var(--sh-prim2)]">
                <button type="submit" className="w-full">
-                  Sign up
+                  {loading ? (
+                     <div className="flex items-center justify-center  ">
+                        <div className="flex space-x-2 animate-pulse">
+                           <div className="dot delay-100"></div>
+                           <div className="dot delay-200"></div>
+                           <div className="dot delay-300"></div>
+                        </div>
+                     </div>
+                  ) : (
+                     "Sign up"
+                  )}
                </button>
             </ul>
          </div>
