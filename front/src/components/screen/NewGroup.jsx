@@ -111,7 +111,8 @@ function NewGroup() {
         {userContacts &&
           userContacts.map((user, index) => {
             if (
-              user.name.toLowerCase().indexOf(userSearch.value.toLowerCase()) > -1 ||
+              user.name.toLowerCase().indexOf(userSearch.value.toLowerCase()) >
+                -1 ||
               added.indexOf(user.id) > -1
             ) {
               return (
@@ -127,6 +128,7 @@ function NewGroup() {
                       className="!w-[42px] !h-[42px] rounded-full p-1"
                     />
                   </li>
+
                   <li className=" relative mx-auto my-[2px]  [&>*]:block text-center">
                     <span className="text-prim1 ">{user.name}</span>
                     <span

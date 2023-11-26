@@ -6,58 +6,67 @@
 @tailwind utilities;
 
 @layer base {
-  * {
-    list-style-type: none;
-    margin: 0px;
-    padding: 0px;
-  }
-  :root {
-    --bg-prim1: #0e1625;
-    --bg-prim2: #16233b;
-    --bg-seco1: white;
-    --bg-seco2: #2c51a9;
-    --text-prim1: white;
-    --text-prim2: #c1c1c3;
-    --text-prim3: #16233b;
-    --sh-prim1: #06090f;
-    --sh-prim2: #16233b;
-    --error: crimson;
-    --success: #008a17;
-  }
-  .theme-base {
-  }
+   * {
+      list-style-type: none;
+      margin: 0px;
+      padding: 0px;
+   }
+   :root {
+      --bg-prim1: #0e1625;
+      --bg-prim2: #16233b;
+      --bg-seco1: white;
+      --bg-seco2: #2c51a9;
+      --text-prim1: white;
+      --text-prim2: #c1c1c3;
+      --text-prim3: #16233b;
+      --sh-prim1: #06090f;
+      --sh-prim2: #16233b;
+      --error: crimson;
+      --success: #008a17;
+   }
+   .theme-base {
+   }
 
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus,
-  textarea:-webkit-autofill,
-  textarea:-webkit-autofill:hover,
-  textarea:-webkit-autofill:focus,
-  select:-webkit-autofill,
-  select:-webkit-autofill:hover,
-  select:-webkit-autofill:focus {
-    -webkit-text-fill-color: var(--text-prim2);
-    -webkit-box-shadow: 0 0 0px 1000px var(--bg-prim1) inset;
-  }
-  /* width */
-  ::-webkit-scrollbar {
-    width: 4px;
-    /* height: 14px; */
-  }
+   input:-webkit-autofill,
+   input:-webkit-autofill:hover,
+   input:-webkit-autofill:focus,
+   textarea:-webkit-autofill,
+   textarea:-webkit-autofill:hover,
+   textarea:-webkit-autofill:focus,
+   select:-webkit-autofill,
+   select:-webkit-autofill:hover,
+   select:-webkit-autofill:focus {
+      -webkit-text-fill-color: var(--text-prim2);
+      -webkit-box-shadow: 0 0 0px 1000px var(--bg-prim1) inset;
+   }
+   /* width */
+   ::-webkit-scrollbar {
+      width: 4px;
+      /* height: 14px; */
+   }
 
-  /* Track */
-  ::-webkit-scrollbar-track {
-    border-radius: 100vh;
-    background: transparent;
-  }
+   /* Track */
+   ::-webkit-scrollbar-track {
+      border-radius: 100vh;
+      background: transparent;
+   }
 
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #424c60;
-  }
+   /* Handle */
+   ::-webkit-scrollbar-thumb {
+      background: #424c60;
+   }
 
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #a0aec0e8;
-  }
+   /* Handle on hover */
+   ::-webkit-scrollbar-thumb:hover {
+      background: #a0aec0e8;
+   }
+}
+
+input,
+textarea,
+button,
+select,
+a,
+div {
+   -webkit-tap-highlight-color: transparent;
 }

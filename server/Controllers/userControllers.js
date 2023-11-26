@@ -169,10 +169,11 @@ module.exports.login = async (req, res, next) => {
 
       res.cookie("SESSION_ID", refreshToken, {
          httpOnly: true,
-         secure: process.env.NODE_ENV === "production" ? true : false, // with secure we cannot work at localhost
-         sameSite: "none",
+         secure: process.env.NODE_ENV === "production", // Set to true in production
+         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
          maxAge: getExpiry(22),
       });
+
       return res.status(200).json({
          msg: "Login successfull",
          token: accessToken,

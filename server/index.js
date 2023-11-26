@@ -64,27 +64,27 @@ io.on("connection", async (socket) => {
 
    // use it to emit message to user currently online and we had a message for them from any one of its beonging chat
    socket.on("user-online", (user) => {
-      console.log("user-login : ", user);
+      // console.log("user-login : ", user);
       socket.join(user);
    });
    // use it to emit message to user-loginout
    socket.on("user-offline", (user) => {
-      console.log("user-logout : ", user);
+      // console.log("user-logout : ", user);
       socket.leave(user);
    });
 
    // this will use to send for typing signal to user currently in particular chat
    socket.on("join-chat", (chat) => {
-      console.log("user joined chat : ", chat);
+      // console.log("user joined chat : ", chat);
       socket.join(chat);
    });
 
    // on recieve message from user currently active and send others related to it who are online
    socket.on("new-message", (chatData) => {
-      console.log("new message ");
+      // console.log("new message ");
       chatData.users.forEach((user) => {
          if (user === chatData.sender._id) return;
-         console.log(user);
+         // console.log(user);
          socket.in(user).emit("emit:new-message", {
             time: chatData.time,
             text: chatData.text,

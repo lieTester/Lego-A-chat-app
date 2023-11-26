@@ -11,25 +11,24 @@ import SettingsBox from "./components/screen/SettingsBox";
 import SetAvatar from "./components/SetAvatar";
 
 function App() {
-  return (
-    <div className="bg-prim1">
-      <Routes>
-        <Route path="login-register" element={<Authentication />} />
-        <Route path="verify-OTP" element={<OtpVerification />} />
-
-        <Route path="/" element={<Remember />}>
-          <Route path="/" element={<Home />}>
-            <Route path="/" element={<ChatsBox />} />
-            <Route path="search" element={<SearchBox />} />
-            <Route path="contacts" element={<ContactsBox />} />
-            <Route path="new-group" element={<NewGroup />} />
-            <Route path="settings" element={<SettingsBox />} />
-          </Route>
-          <Route path="set-avatar" element={<SetAvatar />} />
-        </Route>
-      </Routes>
-    </div>
-  );
+   return (
+      <div className="bg-prim1">
+         <Routes>
+            <Route path="login-register" element={<Authentication />} />
+            <Route path="verify-OTP" element={<OtpVerification />} />
+            <Route path="/" element={<Remember />}>
+               <Route path="/" element={<Home />}>
+                  <Route path="/" element={<ChatsBox />} />
+                  <Route path="search" element={<SearchBox />} />
+                  <Route path="contacts" element={<ContactsBox />} />
+                  <Route path="new-group" element={<NewGroup />} />
+                  <Route path="settings" element={<SettingsBox />} />
+               </Route>
+               <Route path="set-avatar" element={<SetAvatar />} />
+            </Route>
+         </Routes>
+      </div>
+   );
 }
 
 export default App;
