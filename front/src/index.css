@@ -70,3 +70,27 @@ a,
 div {
    -webkit-tap-highlight-color: transparent;
 }
+
+.dot {
+   width: 10px;
+   height: 10px;
+   border-radius: 50%;
+   background-color: #65686f;
+   animation: bounce 1s infinite ease-in-out;
+
+   /* Define animation delay for each dot */
+   animation-delay: var(--animation-delay, 0s);
+}
+
+/* Define different delays for each dot */
+.dot.delay-100 {
+   --animation-delay: 0.1s;
+}
+
+.dot.delay-200 {
+   --animation-delay: 0.2s;
+}
+
+.dot.delay-300 {
+   --animation-delay: 0.3s;
+}

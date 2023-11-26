@@ -52,7 +52,14 @@ function Authentication() {
    return isLoading ? (
       // if users refresh token is in loader phase
       <div className="bg-prim1 h-screen flex justify-center items-center text-prim2">
-         Loading...
+         Loading
+         <div className="flex items-center justify-center  ">
+            <div className="flex space-x-2 animate-pulse">
+               <div className="dot delay-100"></div>
+               <div className="dot delay-200"></div>
+               <div className="dot delay-300"></div>
+            </div>
+         </div>
       </div>
    ) : auth?.accessToken ? (
       // if we want to remember the user

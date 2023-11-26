@@ -50,7 +50,7 @@ function Login({ setForm }) {
                localStorage.setItem("remember", true);
                setTimeout(() => {
                   navigate(from, { replace: true });
-               }, 3000);
+               }, 9000);
             }
          } catch (error) {
             setLoading(false);
